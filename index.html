@@ -3,7 +3,7 @@
 
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
-  <script src="https://d3js.org/d3.v6.js"></script>
+  <script src="d3.v6.js"></script>
   <script src="snap.svg-min.js"></script>
   <script type="module" src="pachinko.js"></script>
   <style>
@@ -12,16 +12,26 @@
       height: 100%;
       width: 100%;
     }
+    .wrap, body, html{
+      height: 99%;
+      width: 99%;
+    }
+    body {
+      background: linear-gradient(135deg,  #a7cfdf 0%,#23538a 100%)
+    }
   </style>
 </head>
 
 <body>
-
   <div class="wrap">
-    <svg id="pachinko"></svg>
+    <svg id="pachinkosvg"></svg>
     <div id="my_dataviz"></div>
   </div>
-
 </body>
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    window.runPachinko();
+  });
+</script>
 
 </html>
