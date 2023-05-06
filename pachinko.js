@@ -18,6 +18,7 @@ function runPachinko() {
         let hspace = 20;
 
         function processPeg(weight, bias, activation, x, y) {
+            let angle = Math.floor(((bias*0.5)+0.25)*90);
             let rounded = 5;
             let myleftpad = leftpad + y%2*20;
             myPaper['x' + x + 'y' + y] = myPaper.group();
@@ -25,11 +26,11 @@ function runPachinko() {
             let peg = myPaper.rect(0, 0, pegwidth, pegheight, rounded, rounded);
             peg.attr({ fill: '#bada55aa', stroke: '#000', strokeWidth: 3 });
             peg.appendTo(myGroup);
-            let textLabel = myPaper.text(3, 22, x + ',' + y);
+            let textLabel = myPaper.text(9, 22, (angle-45)+'°' );
+            textLabel.attr({});
             textLabel.appendTo(myGroup);
             //fixme (y-x) ?huh?
             myGroup.animate({ transform: 'translate(' + ((pegwidth + hspace) * x + myleftpad) + ',' + ((pegheight + vspace) * (y) + pegheight + toppad) + ')' }, 700, mina.bounce);
-            let angle = ((bias*0.5)+0.25)*90
             peg.animate({ transform: 'r(' + (angle+'') + ')' }, 700, mina.bounce);
         }
         myPaper.clear();
@@ -53,8 +54,8 @@ function runPachinko() {
             //pinGroup.transform('scale(0.00546,-0.009100) translate('+(900+(bucketNumber*10000))+',-'+((120*toppad)+((70)*1000))+')');
         });
         //Buckets / Pipes
-        makeQuickNumberedArray(11).forEach(bucketNumber => {
-            let bucketScaleHorizontal = 183;
+        makeQuickNumberedArray(10).forEach(bucketNumber => {
+            let bucketScaleHorizontal = 163;
             let bucketScaleVertical = 110;
             let bucketGroup = myPaper.group();
             let bucket = myPaper.path(bucketPath);
