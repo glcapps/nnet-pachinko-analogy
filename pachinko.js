@@ -53,6 +53,7 @@ function runPachinko() {
             });
         });
         //Bowling Pins
+        myPaper.pinsgroup = myPaper.group();
         makeQuickNumberedArray(10).forEach(bowlingPinNumber => {
             const pinScale = 0.7;
             let pinGroup = myPaper.group();
@@ -63,16 +64,26 @@ function runPachinko() {
                 pinGroup.transform('scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')');
             }
             function moveBowlingPinsToFormation() {
-                let pinPositions = [[],[1000,400],[950,340],[1050,340],[900,280],[1000,280],[1100,280],[850,220],[950,220],[1050,220],[1150,220]];
+                const leftmargin = 850;
+                const topmargin = 50;
+                const rowWidth = 40;
+                const rowHeight = 65;
+                let pinPositions = [[], [leftmargin + rowWidth * 3, topmargin + rowHeight * 3], [leftmargin + rowWidth * 2, topmargin + rowHeight * 2], [leftmargin + rowWidth * 4, topmargin + rowHeight * 2], [leftmargin + rowWidth, topmargin + rowHeight], [leftmargin + rowWidth * 3, topmargin + rowHeight], [leftmargin + rowWidth * 5, topmargin + rowHeight], [leftmargin, topmargin], [leftmargin + rowWidth * 2, topmargin], [leftmargin + rowWidth * 4, topmargin], [leftmargin + rowWidth * 6, topmargin]];
                 pinGroup.transform('scale(' + pinScale + ',' + pinScale + ') translate(' + pinPositions[pinMap[bowlingPinNumber]][0] + ',' + pinPositions[pinMap[bowlingPinNumber]][1] + ')');
             }
+            // myPaper.pinsgroup.add(pin);
+            //pin.click();
             moveBowlingPinsToFormation();
+            //moveBowlingPinsToMachine();
             pinGroup.append(pin);
             let labelText = pinMap[bowlingPinNumber];
             let textLabel = myPaper.text(9, 22, '' + labelText);
             textLabel.attr({ stroke: colorWhite });
             textLabel.transform('scale(' + 2 + ',' + 2 + ') translate(-' + (labelText - 10 ? 1 : 5) + ',' + 24 + ')');
             textLabel.appendTo(pinGroup);
+            pinGroup.click(function(){
+                moveBowlingPinsToMachine();
+            }); 
         });
         //Buckets / Pipes
         makeQuickNumberedArray(10).forEach(bucketNumber => {
