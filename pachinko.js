@@ -25,11 +25,12 @@ function runPachinko() {
             let peg = myPaper.rect(0, 0, pegwidth, pegheight, rounded, rounded);
             peg.attr({ fill: '#bada55aa', stroke: '#000', strokeWidth: 3 });
             peg.appendTo(myGroup);
-            let textLabel = myPaper.text(1, 22, 'x' + x + 'y' + y);
+            let textLabel = myPaper.text(3, 22, x + ',' + y);
             textLabel.appendTo(myGroup);
             //fixme (y-x) ?huh?
             myGroup.animate({ transform: 'translate(' + ((pegwidth + hspace) * x + myleftpad) + ',' + ((pegheight + vspace) * (y) + pegheight + toppad) + ')' }, 700, mina.bounce);
-            peg.animate({ transform: 'r(' + (bias * 90) + ')' }, 700, mina.bounce);
+            let angle = ((bias*0.5)+0.25)*90
+            peg.animate({ transform: 'r(' + (angle+'') + ')' }, 700, mina.bounce);
         }
         myPaper.clear();
         function makeQuickNumberedArray(Count) {
@@ -37,7 +38,7 @@ function runPachinko() {
         }
         makeQuickNumberedArray(10).forEach(x => {
             makeQuickNumberedArray(10).forEach(y => {
-                processPeg(Math.random(), (Math.random()*0.5)+0.25, 'diamond', y, x);
+                processPeg(Math.random(), (Math.random()), 'diamond', y, x);
             });
         });
         //Bowling Pins
