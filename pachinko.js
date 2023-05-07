@@ -64,11 +64,11 @@ function runPachinko() {
                 pinGroup.transform('scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')');
             }
             function animateBowlingPinsToMachine() {
-                pinGroup.animate({transform:'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')'});
+                pinGroup.animate({ transform: 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')' });
             }
             let myAnimateBowlingPinsToMachine = {};
 
-            pinAnimations.push([pinGroup,'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')']);
+            pinAnimations.push([pinGroup, 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')']);
             function moveBowlingPinsToFormation() {
                 const leftmargin = 850;
                 const topmargin = 50;
@@ -89,12 +89,12 @@ function runPachinko() {
             textLabel.appendTo(pinGroup);
             pinsGroups.add(pinGroup);
         });
-            pinsGroups.click(function(){
-                pinAnimations.forEach(pinGroupTuple => {
-                    //pinGroupTuple[0].animate({transform:(pinGroupTuple[1])});
-                    pinGroupTuple[0].transform(pinGroupTuple[1]);
-                });
-            }); 
+        pinsGroups.click(function () {
+            pinAnimations.forEach(pinGroupTuple => {
+                //pinGroupTuple[0].animate({transform:(pinGroupTuple[1])});
+                pinGroupTuple[0].transform(pinGroupTuple[1]);
+            });
+        });
         //Buckets / Pipes
         makeQuickNumberedArray(10).forEach(bucketNumber => {
             const bucketScaleHorizontal = 163;
