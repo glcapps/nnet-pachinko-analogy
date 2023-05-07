@@ -164,8 +164,11 @@ function runPachinko() {
             let here = "HEREDOC";
             return getStringBetween(RedBallFragmentString.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
         }
-        let test = myPaper.append(Snap.fragment(RedBallFragmentString()));
+        let ballGroup = myPaper.group();
+        let ball = Snap.parse(RedBallFragmentString());
+        ballGroup.append(ball);
         debugger;
+        ballGroup.transform('scale(' + 0.025 + ',' + 0.025 + ') translate(-' +23+ ',' + 24 + ')');
     } // displayGraph
     displayPachinko();
 }
