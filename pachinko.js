@@ -110,6 +110,62 @@ function runPachinko() {
             textLabel.appendTo(bucketGroup);
             bucketGroup.transform('scale(' + (1 / bucketScaleHorizontal) + ',-' + (1 / bucketScaleVertical) + ') translate(' + (900 + (bucketNumber * 10000)) + ',-' + ((120 * toppad) + ((70) * 1000)) + ')');
         });
+
+        //redballs
+        function MyHereDoc() {
+            /*HERE
+            <div>
+                <p>
+                    This is written in the HEREDOC, notice the multilines :D.
+                </p>
+                <p>
+                    HERE
+                </p>
+                <p>
+                    And Here
+                </p>
+            </div>
+            HERE*/
+            let here = "HERE";
+            let reobj = new RegExp("/\\*" + here + "\\n[\\s\\S]*?\\n" + here + "\\*/", "m");
+            let str = reobj.exec(MyHereDoc.toString());
+            // str = str.replace(new RegExp("/\\*" + here + "\\n", 'm'), '').toString();
+            // return str.replace(new RegExp("\\n" + here + "\\*/", 'm'), '').toString();
+        }
+        console.log(MyHereDoc());
+
+        function getStringBetween(str, start, end) {
+            str = str.replaceAll('\\', '{{{backslash}}}');
+            str = str.replaceAll('\n', '{{{newline}}}');
+            str = str.replaceAll('*', '{{{asterisk}}}');
+            str = str.replaceAll('/', '{{{forwardslash}}}');
+            let result = str.match(new RegExp(start + "(.*)" + end));
+            result = result[1];
+            result = result.replaceAll('{{{newline}}}', '\n');
+            result = result.replaceAll('{{{backslash}}}', '\\');
+            result = result.replaceAll('{{{asterisk}}}', '*');
+            result = result.replaceAll('{{{forwardslash}}}', '/');
+            return result;
+        }
+        function RedBallFragmentString() {
+            /*HEREDOC
+            <linearGradient id="linearGradientRedBall" y2="535.22" gradientUnits="userSpaceOnUse" x2="605.71" y1="535.22"
+                x1="154.29">
+                <stop id="stop15842" style="stop-color:#770900" offset="0" />
+                <stop id="stop15848" style="stop-color:#da101b" offset=".5" />
+                <stop id="stop15850" style="stop-color:#d2400f" offset=".75" />
+                <stop id="stop15852" style="stop-color:#d44316;stop-opacity:.61458" offset=".9375" />
+                <stop id="stop15838" style="stop-color:#c30000;stop-opacity:.21875" offset="1" />
+            </linearGradient>
+            <path xmlns="http://www.w3.org/2000/svg" id="path14863" style="fill:url(#linearGradientRedBall)"
+                d="m605.71 535.22a225.71 225.71 0 1 1 -451.42 0 225.71 225.71 0 1 1 451.42 0z"
+                transform="matrix(-.67295 -.73969 .73969 -.67295 239.83 1176.5)" />
+            HEREDOC*/
+            let here = "HEREDOC";
+            return getStringBetween(RedBallFragmentString.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
+        }
+        let test = myPaper.append(Snap.fragment(RedBallFragmentString()));
+        debugger;
     } // displayGraph
     displayPachinko();
 }
