@@ -53,16 +53,22 @@ function runPachinko() {
             });
         });
         //Bowling Pins
-        myPaper.pinsgroup = myPaper.group();
+        let pinsGroups = myPaper.group();
+        let pinAnimations = [];
         makeQuickNumberedArray(10).forEach(bowlingPinNumber => {
             const pinScale = 0.7;
             let pinGroup = myPaper.group();
             let pin = myPaper.path(bowlingPinPath);
-
             pin.attr({ fill: colorOffWhite, stroke: colorDimWhite, strokeWidth: 1 });
             function moveBowlingPinsToMachine() {
                 pinGroup.transform('scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')');
             }
+            function animateBowlingPinsToMachine() {
+                pinGroup.animate({transform:'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')'});
+            }
+            let myAnimateBowlingPinsToMachine = {};
+
+            pinAnimations.push([pinGroup,'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')']);
             function moveBowlingPinsToFormation() {
                 const leftmargin = 850;
                 const topmargin = 50;
@@ -81,10 +87,14 @@ function runPachinko() {
             textLabel.attr({ stroke: colorWhite });
             textLabel.transform('scale(' + 2 + ',' + 2 + ') translate(-' + (labelText - 10 ? 1 : 5) + ',' + 24 + ')');
             textLabel.appendTo(pinGroup);
-            pinGroup.click(function(){
-                moveBowlingPinsToMachine();
-            }); 
+            pinsGroups.add(pinGroup);
         });
+            pinsGroups.click(function(){
+                pinAnimations.forEach(pinGroupTuple => {
+                    //pinGroupTuple[0].animate({transform:(pinGroupTuple[1])});
+                    pinGroupTuple[0].transform(pinGroupTuple[1]);
+                });
+            }); 
         //Buckets / Pipes
         makeQuickNumberedArray(10).forEach(bucketNumber => {
             const bucketScaleHorizontal = 163;
