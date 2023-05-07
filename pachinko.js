@@ -12,6 +12,23 @@ function runPachinko() {
     const colorMint = '#BADA55';
     const colorSuffixAplhaMed = 'AA';
 
+    //utility functions
+    function makeQuickNumberedArray(Count) {
+        return Array.apply(null, { length: Count }).map(Number.call, Number);
+    }
+    function getStringBetween(str, start, end) {
+        str = str.replaceAll('\\', '{{{backslash}}}').replaceAll('\n', '{{{newline}}}');
+        str = str.replaceAll('*', '{{{asterisk}}}').replaceAll('/', '{{{forwardslash}}}');
+        let result = str.match(new RegExp(start + "(.*)" + end));
+        result = result[1];
+        result = result.replaceAll('{{{newline}}}', '\n');
+        result = result.replaceAll('{{{backslash}}}', '\\');
+        result = result.replaceAll('{{{asterisk}}}', '*');
+        result = result.replaceAll('{{{forwardslash}}}', '/');
+        return result;
+    }
+    //end utility functions
+
     function displayPachinko() {
         const toppad = 75;
         const leftpad = 20;
@@ -43,10 +60,30 @@ function runPachinko() {
             myGroup.animate({ transform: 'translate(' + ((pegwidth + hspace) * x + myleftpad) + ',' + ((pegheight + vspace) * (y) + pegheight + toppad) + ')' }, 700, mina.bounce);
             peg.animate({ transform: 'r(' + (angle + '') + ')' }, 700, mina.bounce);
         }
+
+        //init
         myPaper.clear();
-        function makeQuickNumberedArray(Count) {
-            return Array.apply(null, { length: Count }).map(Number.call, Number);
-        }
+
+        //presentation buttons
+        let buttonsGroup = myPaper.group();
+        makeQuickNumberedArray(5).forEach(buttonNumber => {
+            let buttonGroup = myPaper.group();
+            let button = Snap.parse(ButtonFragmentString());
+            buttonGroup.append(button);
+            buttonGroup.transform('scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 730) + ',' + (buttonNumber * 71 + 100) + ')');
+            buttonGroup.appendTo(buttonsGroup);
+        });
+
+        //Balls
+        let ballsGroup = myPaper.group();
+        makeQuickNumberedArray(270).forEach(ballNumber => {
+            let ballGroup = myPaper.group();
+            let ball = Snap.parse(RedBallFragmentString());
+            ballGroup.append(ball);
+            ballGroup.transform('scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')');
+            ballGroup.appendTo(ballsGroup);
+        });
+
         makeQuickNumberedArray(10).forEach(x => {
             makeQuickNumberedArray(10).forEach(y => {
                 processPeg(Math.random(), (Math.random()), 'diamond', y, x);
@@ -70,8 +107,8 @@ function runPachinko() {
 
             pinAnimations.push([pinGroup, 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')']);
             function moveBowlingPinsToFormation() {
-                const leftmargin = 850;
-                const topmargin = 50;
+                const leftmargin = 870;
+                const topmargin = 430;
                 const rowWidth = 40;
                 const rowHeight = 65;
                 let pinPositions = [[], [leftmargin + rowWidth * 3, topmargin + rowHeight * 3], [leftmargin + rowWidth * 2, topmargin + rowHeight * 2], [leftmargin + rowWidth * 4, topmargin + rowHeight * 2], [leftmargin + rowWidth, topmargin + rowHeight], [leftmargin + rowWidth * 3, topmargin + rowHeight], [leftmargin + rowWidth * 5, topmargin + rowHeight], [leftmargin, topmargin], [leftmargin + rowWidth * 2, topmargin], [leftmargin + rowWidth * 4, topmargin], [leftmargin + rowWidth * 6, topmargin]];
@@ -112,41 +149,6 @@ function runPachinko() {
         });
 
         //redballs
-        function MyHereDoc() {
-            /*HERE
-            <div>
-                <p>
-                    This is written in the HEREDOC, notice the multilines :D.
-                </p>
-                <p>
-                    HERE
-                </p>
-                <p>
-                    And Here
-                </p>
-            </div>
-            HERE*/
-            let here = "HERE";
-            let reobj = new RegExp("/\\*" + here + "\\n[\\s\\S]*?\\n" + here + "\\*/", "m");
-            let str = reobj.exec(MyHereDoc.toString());
-            // str = str.replace(new RegExp("/\\*" + here + "\\n", 'm'), '').toString();
-            // return str.replace(new RegExp("\\n" + here + "\\*/", 'm'), '').toString();
-        }
-        console.log(MyHereDoc());
-
-        function getStringBetween(str, start, end) {
-            str = str.replaceAll('\\', '{{{backslash}}}');
-            str = str.replaceAll('\n', '{{{newline}}}');
-            str = str.replaceAll('*', '{{{asterisk}}}');
-            str = str.replaceAll('/', '{{{forwardslash}}}');
-            let result = str.match(new RegExp(start + "(.*)" + end));
-            result = result[1];
-            result = result.replaceAll('{{{newline}}}', '\n');
-            result = result.replaceAll('{{{backslash}}}', '\\');
-            result = result.replaceAll('{{{asterisk}}}', '*');
-            result = result.replaceAll('{{{forwardslash}}}', '/');
-            return result;
-        }
         function RedBallFragmentString() {
             /*HEREDOC
             <linearGradient id="linearGradientRedBall" y2="535.22" gradientUnits="userSpaceOnUse" x2="605.71" y1="535.22"
@@ -164,11 +166,29 @@ function runPachinko() {
             let here = "HEREDOC";
             return getStringBetween(RedBallFragmentString.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
         }
-        let ballGroup = myPaper.group();
-        let ball = Snap.parse(RedBallFragmentString());
-        ballGroup.append(ball);
+        //buttons
+        function ButtonFragmentString() {
+            /*HEREDOC
+            <g xmlns="http://www.w3.org/2000/svg" transform="translate(0,-903.36218)" id="layer1">
+            <defs xmlns="http://www.w3.org/2000/svg" id="defs4"><linearGradient id="linearGradient3801"><stop id="stop3803" style="stop-color:#ccf7ff;stop-opacity:1" offset="0"/><stop id="stop3805" style="stop-color:#ebfcff;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient6723"><stop id="stop6725" style="stop-color:#c5eff8;stop-opacity:1" offset="0"/><stop id="stop6727" style="stop-color:#6dd2f1;stop-opacity:1" offset="0.14646658"/><stop id="stop6729" style="stop-color:#4abbe6;stop-opacity:1" offset="0.2559669"/><stop id="stop3713" style="stop-color:#008ccf;stop-opacity:1" offset="0.54674143"/><stop id="stop6731" style="stop-color:#008ccf;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient6661"><stop id="stop6663" style="stop-color:#c5eff8;stop-opacity:1" offset="0"/><stop id="stop6665" style="stop-color:#6dd2f1;stop-opacity:1" offset="0.17655624"/><stop id="stop6667" style="stop-color:#4abbe6;stop-opacity:1" offset="0.33419999"/><stop id="stop6721" style="stop-color:#0d79ba;stop-opacity:1" offset="0.66710001"/><stop id="stop6669" style="stop-color:#008efb;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient6611"><stop id="stop6613" style="stop-color:#c5eff8;stop-opacity:1" offset="0"/><stop id="stop6615" style="stop-color:#6dd2f1;stop-opacity:1" offset="0.21595745"/><stop id="stop6617" style="stop-color:#4abbe6;stop-opacity:1" offset="0.38936168"/><stop id="stop6619" style="stop-color:#006fa6;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient6583"><stop id="stop6585" style="stop-color:#ccf7ff;stop-opacity:1" offset="0"/><stop id="stop6591" style="stop-color:#e5fbff;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient6571"><stop id="stop6573" style="stop-color:#c5eff8;stop-opacity:1" offset="0"/><stop id="stop6581" style="stop-color:#6dd2f1;stop-opacity:1" offset="0.3351064"/><stop id="stop6575" style="stop-color:#4abbe6;stop-opacity:1" offset="0.5"/><stop id="stop6577" style="stop-color:#18252c;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient6557"><stop id="stop6559" style="stop-color:#91e9fd;stop-opacity:1" offset="0"/><stop id="stop6569" style="stop-color:#4abbe6;stop-opacity:1" offset="0.5"/><stop id="stop6565" style="stop-color:#038dd0;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient6004"><stop id="stop6006" style="stop-color:#ffffff;stop-opacity:0.9285714" offset="0"/><stop id="stop6008" style="stop-color:#ffffff;stop-opacity:0" offset="1"/></linearGradient><linearGradient id="linearGradient5932"><stop id="stop5934" style="stop-color:#d2e0e7;stop-opacity:1" offset="0"/><stop id="stop5936" style="stop-color:#028acb;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient5399"><stop id="stop5401" style="stop-color:#ffffff;stop-opacity:1" offset="0"/><stop id="stop5403" style="stop-color:#028acb;stop-opacity:1" offset="1"/></linearGradient><linearGradient id="linearGradient3911"><stop id="stop3913" style="stop-color:#91e9fd;stop-opacity:0" offset="0"/><stop id="stop3915" style="stop-color:#097ab0;stop-opacity:1" offset="1"/></linearGradient><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient5405" NS2:href="#linearGradient3911" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-477.71618,-458.61212)" spreadMethod="pad"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient5405-3" NS2:href="#linearGradient3911-1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.5130797,2.224476e-7,-1.7703186e-7,1.9999997,-351.79095,-458.61211)" spreadMethod="pad"/><linearGradient id="linearGradient3911-1"><stop id="stop3913-4" style="stop-color:#e0fffe;stop-opacity:0.96062994" offset="0"/><stop id="stop5942-1" style="stop-color:#b3f0fb;stop-opacity:0.92125982" offset="0.15113398"/><stop id="stop5940-4" style="stop-color:#86e2f9;stop-opacity:1" offset="0.25928274"/><stop id="stop3915-4" style="stop-color:#028acb;stop-opacity:1" offset="1"/></linearGradient><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient5965" NS2:href="#linearGradient3911-1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.5130797,2.224476e-7,-1.7703186e-7,1.9999997,-210.53451,-329.62366)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6010" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-0.5,0)"/><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter6357"><feGaussianBlur result="blur" stdDeviation="2.000000" in="SourceAlpha" id="feGaussianBlur6359"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.300000 0 " type="matrix" result="bluralpha" id="feColorMatrix6361"/><feOffset result="offsetBlur" dy="3.000000" dx="3.000000" in="bluralpha" id="feOffset6363"/><feMerge id="feMerge6365"><feMergeNode in="offsetBlur" id="feMergeNode6367"/><feMergeNode in="SourceGraphic" id="feMergeNode6369"/></feMerge></filter><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6512" NS2:href="#linearGradient3911" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-477.71618,-458.61212)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6514" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-0.5,0)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6526" NS2:href="#linearGradient3911" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-477.71618,-458.61212)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6528" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-0.5,0)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6537" NS2:href="#linearGradient3911" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-477.71618,-458.61212)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6539" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-0.5,0)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6546" NS2:href="#linearGradient3911" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-477.71618,-458.61212)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6548" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-0.5,0)"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6551" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-99.166305,-95.609955)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6554" NS2:href="#linearGradient6557" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-576.38248,-554.22208)" spreadMethod="pad"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6567" NS2:href="#linearGradient6571" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-576.38248,-554.22208)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="133.31017" y1="331.01505" x2="133.31017" y2="275.4458" id="linearGradient6589" NS2:href="#linearGradient6583" gradientUnits="userSpaceOnUse"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6609" NS2:href="#linearGradient6611" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-576.38248,-554.22208)" spreadMethod="pad"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6633" NS2:href="#linearGradient6611" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-576.38248,-554.22208)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6635" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-99.166305,-95.609955)"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="133.31017" y1="331.01505" x2="133.31017" y2="275.4458" id="linearGradient6637" NS2:href="#linearGradient6583" gradientUnits="userSpaceOnUse"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="133.31017" y1="331.01505" x2="133.31017" y2="275.4458" id="linearGradient6644" NS2:href="#linearGradient6583" gradientUnits="userSpaceOnUse" gradientTransform="translate(-60.125,670.5)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6650" NS2:href="#linearGradient6611" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-576.38248,-554.22208)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6652" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-99.166305,-95.609955)"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6655" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-159.2913,574.89004)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6658" NS2:href="#linearGradient6661" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-636.50748,116.27792)" spreadMethod="pad"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6683" NS2:href="#linearGradient6661" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-636.50748,116.27792)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6685" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-159.2913,574.89004)"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="133.31017" y1="331.01505" x2="133.31017" y2="275.4458" id="linearGradient6687" NS2:href="#linearGradient6583" gradientUnits="userSpaceOnUse" gradientTransform="translate(-60.125,670.5)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="232.5" cy="458.61218" r="58.75" fx="232.5" fy="458.61218" id="radialGradient6696" NS2:href="#linearGradient6661" gradientUnits="userSpaceOnUse" gradientTransform="matrix(3.0546935,2.4286098e-7,-1.5900841e-7,1.9999997,-636.50748,116.27792)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="423.77374" id="linearGradient6698" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-159.2913,574.89004)"/><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter3102"><feGaussianBlur result="blur" stdDeviation="2.000000" in="SourceAlpha" id="feGaussianBlur3104"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.450000 0 " type="matrix" result="bluralpha" id="feColorMatrix3106"/><feOffset result="offsetBlur" dy="4.000000" dx="4.000000" in="bluralpha" id="feOffset3108"/><feMerge id="feMerge3110"><feMergeNode in="offsetBlur" id="feMergeNode3112"/><feMergeNode in="SourceGraphic" id="feMergeNode3114"/></feMerge></filter><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter2913"><feGaussianBlur result="blur" stdDeviation="2.000000" in="SourceAlpha" id="feGaussianBlur2915"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.325000 0 " type="matrix" result="bluralpha" id="feColorMatrix2917"/><feOffset result="offsetBlur" dy="4.000000" dx="4.000000" in="bluralpha" id="feOffset2919"/><feMerge id="feMerge2921"><feMergeNode in="offsetBlur" id="feMergeNode2923"/><feMergeNode in="SourceGraphic" id="feMergeNode2925"/></feMerge></filter><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter3989"><feGaussianBlur result="blur" stdDeviation="2.500000" in="SourceAlpha" id="feGaussianBlur3991"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.484000 0 " type="matrix" result="bluralpha" id="feColorMatrix3993"/><feOffset result="offsetBlur" dy="0.000000" dx="0.000000" in="bluralpha" id="feOffset3995"/><feMerge id="feMerge3997"><feMergeNode in="offsetBlur" id="feMergeNode3999"/><feMergeNode in="SourceGraphic" id="feMergeNode4001"/></feMerge></filter><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter4017"><feGaussianBlur result="blur" stdDeviation="2.500000" in="SourceAlpha" id="feGaussianBlur4019"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.370000 0 " type="matrix" result="bluralpha" id="feColorMatrix4021"/><feOffset result="offsetBlur" dy="4.000000" dx="4.000000" in="bluralpha" id="feOffset4023"/><feMerge id="feMerge4025"><feMergeNode in="offsetBlur" id="feMergeNode4027"/><feMergeNode in="SourceGraphic" id="feMergeNode4029"/></feMerge></filter><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter4073"><feGaussianBlur result="blur" stdDeviation="2.500000" in="SourceAlpha" id="feGaussianBlur4075"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.370000 0 " type="matrix" result="bluralpha" id="feColorMatrix4077"/><feOffset result="offsetBlur" dy="6.000000" dx="3.000000" in="bluralpha" id="feOffset4079"/><feMerge id="feMerge4081"><feMergeNode in="offsetBlur" id="feMergeNode4083"/><feMergeNode in="SourceGraphic" id="feMergeNode4085"/></feMerge></filter><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter4157"><feGaussianBlur result="blur" stdDeviation="3.000000" in="SourceAlpha" id="feGaussianBlur4159"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.500000 0 " type="matrix" result="bluralpha" id="feColorMatrix4161"/><feOffset result="offsetBlur" dy="1.000000" dx="0.000000" in="bluralpha" id="feOffset4163"/><feMerge id="feMerge4165"><feMergeNode in="offsetBlur" id="feMergeNode4167"/><feMergeNode in="SourceGraphic" id="feMergeNode4169"/></feMerge></filter><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="233" y1="341.11218" x2="233" y2="421.28052" id="linearGradient2999" NS2:href="#linearGradient6004" gradientUnits="userSpaceOnUse" gradientTransform="translate(-144.56338,577.13268)"/><radialGradient xmlns:NS2="http://www.w3.org/1999/xlink" cx="252.96033" cy="458.61218" r="58.75" fx="252.96033" fy="458.61218" id="radialGradient3002" NS2:href="#linearGradient6723" gradientUnits="userSpaceOnUse" gradientTransform="matrix(5.2452199,-2.0117937e-7,7.6709552e-8,1.9999997,-1175.896,118.52067)" spreadMethod="pad"/><linearGradient xmlns:NS2="http://www.w3.org/1999/xlink" x1="-194.71872" y1="-8.5078068" x2="-194.71872" y2="-110.5078" id="linearGradient3799" NS2:href="#linearGradient3801" gradientUnits="userSpaceOnUse" gradientTransform="translate(354.89948,1030.6048)"/><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter3827"><feGaussianBlur result="blur" stdDeviation="2.500000" in="SourceAlpha" id="feGaussianBlur3829"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.370000 0 " type="matrix" result="bluralpha" id="feColorMatrix3831"/><feOffset result="offsetBlur" dy="6.000000" dx="3.000000" in="bluralpha" id="feOffset3833"/><feMerge id="feMerge3835"><feMergeNode in="offsetBlur" id="feMergeNode3837"/><feMergeNode in="SourceGraphic" id="feMergeNode3839"/></feMerge></filter><filter x="-0.25" y="-0.25" width="1.5" height="1.5" color-interpolation-filters="sRGB" id="filter3869"><feGaussianBlur result="blur" stdDeviation="3.000000" in="SourceAlpha" id="feGaussianBlur3871"/><feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.500000 0 " type="matrix" result="bluralpha" id="feColorMatrix3873"/><feOffset result="offsetBlur" dy="1.000000" dx="0.000000" in="bluralpha" id="feOffset3875"/><feMerge id="feMerge3877"><feMergeNode in="offsetBlur" id="feMergeNode3879"/><feMergeNode in="SourceGraphic" id="feMergeNode3881"/></feMerge></filter></defs>
+            <rect width="250" height="125" rx="16.4" x="25.936615" y="914.49481" id="rect6518" style="fill:#3cc1fa;fill-opacity:1;stroke:none;filter:url(#filter3827)"/><rect width="242.5" height="117.5" rx="12.5" x="29.686615" y="918.24481" id="rect6520" style="fill:url(#radialGradient3002);fill-opacity:1;fill-rule:nonzero;stroke:none"/><path d="m 42.186616,918.24486 c -6.925,0 -12.5,5.575 -12.5,12.49998 l 0,18.06248 0.6875,2.4375 c 0,0 165.848374,53.79428 241.609804,24.49995 0.13978,-0.054 -0.13855,-0.10209 0,-0.15625 l 0,-44.84368 c 0,-6.92498 -5.37199,-12.49998 -12.297,-12.49998 l -217.500304,0 z" id="path6522" style="fill:url(#linearGradient2999);fill-opacity:1;stroke:none"/><text x="38.899506" y="998.6048" id="text3017" style="font-size:40px;font-style:normal;font-weight:normal;fill:url(#linearGradient3799);fill-opacity:1;stroke:none;filter:url(#filter3869);font-family:Bitstream Vera Sans"><tspan x="38.899506" y="998.6048" id="tspan3019" style="font-size:56px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:url(#linearGradient3799);fill-opacity:1;font-family:AR PL UKai TW;-inkscape-font-specification:AR PL UKai TW"/></text>
+            </g>
+            HEREDOC*/
+            let here = "HEREDOC";
+            return getStringBetween(ButtonFragmentString.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
+        }
+        function getHereDocFromCodeBlock(func){
+            let here = "HEREDOC";
+            return getStringBetween(func.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
+        }
         debugger;
-        ballGroup.transform('scale(' + 0.025 + ',' + 0.025 + ') translate(-' +23+ ',' + 24 + ')');
+        console.log(getHereDocFromCodeBlock({
+
+            /*HEREDOC
+            test
+            HEREDOC*/
+
+        }));
     } // displayGraph
     displayPachinko();
 }
