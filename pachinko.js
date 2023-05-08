@@ -54,11 +54,14 @@ function runPachinko() {
         const hspace = 20;
         
         let pinAnimations = [];
+        let ballAnimations = [];
+        let pegAnimations = [];
 
         function processPeg(weight, bias, activation, x, y) {
             let myDesignation = 'x' + x + 'y' + y;
             let angle = Math.floor(((bias * 0.5) + 0.25) * 90);
-            const rounded = 5;
+            const cornered = 5;
+            const rounded = 50;
             let myleftpad = leftpad + y % 2 * 20;
             myPaper[myDesignation] = myPaper.group();
             let myGroup = myPaper[myDesignation];
@@ -72,6 +75,8 @@ function runPachinko() {
             //fixme (y-x) ?huh?
             myGroup.animate({ transform: 'translate(' + ((pegwidth + hspace) * x + myleftpad) + ',' + ((pegheight + vspace) * (y) + pegheight + toppad) + ')' }, 700, mina.bounce);
             peg.animate({ transform: 'r(' + (angle + '') + ')' }, 700, mina.bounce);
+            peg.animate({ r: cornered }, 3000, mina.easein);
+            
         }
 
         //init
@@ -93,7 +98,13 @@ function runPachinko() {
             .click(function () {
                 this.animate({transform: 'scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 780) + ',' + (buttonNumber * 71 + 50) + ')'}, 300, mina.easein);
                 //call the function in this array that goes with the button number
-                [movePinsToColumns,function(){},function(){},function(){},function(){}][buttonNumber]();                
+                [movePinsToColumns,
+                function(){
+                    ballAnimations.forEach(myItem => {
+                        myItem[0].animate({transform:myItem[2]},2000,mina.bounce);
+                    });
+                },
+                function(){},function(){},function(){}][buttonNumber]();                
              });
             buttonGroup.appendTo(buttonsGroup);
         });
@@ -104,9 +115,21 @@ function runPachinko() {
             let ballGroup = myPaper.group();
             let ball = Snap.parse(BallFragmentString());
             ballGroup.append(ball);
-            ballGroup.transform('scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')');
+            ballAnimations.push([ballGroup,
+                'scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')',
+                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')',
+                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')'
+            ]);
+            // ballGroup.transform('scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')');
             ballGroup.appendTo(ballsGroup);
         });
+        ballAnimations.forEach(myItem => {
+            myItem[0].transform(myItem[1]);
+        });
+        function MoveBallsToColumns(targetColumnArray){
+            if (targetColumnArray == undefined) {targetColumnArray = makeQuickNumberedArray(10)}
+            
+        }
         //Pegs
         makeQuickNumberedArray(10).forEach(x => {
             makeQuickNumberedArray(10).forEach(y => {
