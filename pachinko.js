@@ -16,7 +16,7 @@ function runPachinko() {
     function makeQuickNumberedArray(Count) {
         return Array.apply(null, { length: Count }).map(Number.call, Number);
     }
-    function getStringBetween(str, start, end) {
+    function getStringBetweenRegex(str, start, end) {
         str = str.replaceAll('\\', '{{{backslash}}}').replaceAll('\n', '{{{newline}}}');
         str = str.replaceAll('*', '{{{asterisk}}}').replaceAll('/', '{{{forwardslash}}}');
         let result = str.match(new RegExp(start + "(.*)" + end));
@@ -26,6 +26,12 @@ function runPachinko() {
         result = result.replaceAll('{{{asterisk}}}', '*');
         result = result.replaceAll('{{{forwardslash}}}', '/');
         return result;
+    }
+    function getStringBetween(str, start, end) {
+        let i = str.indexOf(start),
+            j = str.indexOf(end, i + start.length);
+        if (i == 0 || i > j) return "";
+        return str.slice(i + start.length, j);
     }
     function getHereDocFromCodeBlock(func) {
         let here = "HEREDOC";
@@ -109,7 +115,7 @@ function runPachinko() {
                             //demo single ball down round peg pachinko
                         }, function () {
                             pegAnimations.forEach(pegTuple => {
-                                pegTuple[0].animate(pegTuple[1], 3000, mina.easein);
+                                pegTuple[0].animate(pegTuple[1], 2000, mina.easein);
                             });
                         }, function () { }][buttonNumber]();
                 });
