@@ -52,6 +52,8 @@ function runPachinko() {
         const pegheight = 36;
         const vspace = 20;
         const hspace = 20;
+        
+        let pinAnimations = [];
 
         function processPeg(weight, bias, activation, x, y) {
             let myDesignation = 'x' + x + 'y' + y;
@@ -77,19 +79,21 @@ function runPachinko() {
 
         //presentation buttons
         let buttonsGroup = myPaper.group();
-        makeQuickNumberedArray(5).forEach(buttonNumber => {
+        makeQuickNumberedArray(5).reverse().forEach(buttonNumber => {
             let buttonGroup = myPaper.group();
             let button = Snap.parse(ButtonFragmentString());
             buttonGroup.append(button);
-            const labels = ["five","four","three","two","one"];
-            let textLabel = myPaper.text(9, 22, labels[buttonNumber]);
+            const labels = ['one','two','three','four','five',];
+            let textLabel = myPaper.text(17, 16, labels[buttonNumber]);
             textLabel.attr({ stroke: '#000000' });
             textLabel.transform('scale(' + 2.2 + ',' + 2.2 + ') translate(' + (40) + ',' + 24 + ')');
             textLabel.appendTo(buttonGroup);
             buttonGroup.transform('scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 730) + ',' + (buttonNumber * 71 + 100) + ')')
             .data("buttonNumber",buttonNumber)
             .click(function () {
-                this.animate({transform: 'scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 130) + ',' + (40) + ')'}, 300, mina.easein);
+                this.animate({transform: 'scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 780) + ',' + (buttonNumber * 71 + 50) + ')'}, 300, mina.easein);
+                //call the function in this array that goes with the button number
+                [movePinsToColumns,function(){},function(){},function(){},function(){}][buttonNumber]();                
              });
             buttonGroup.appendTo(buttonsGroup);
         });
@@ -111,21 +115,17 @@ function runPachinko() {
         });
         //Bowling Pins
         let pinsGroups = myPaper.group();
-        let pinAnimations = [];
         makeQuickNumberedArray(10).forEach(bowlingPinNumber => {
+            drawBowlingPin(bowlingPinNumber,true);
+            drawBowlingPin(bowlingPinNumber,false);
+        });
+        function drawBowlingPin(bowlingPinNumber,isMovable) {
             const pinScale = 0.7;
             let pinGroup = myPaper.group();
             let pin = myPaper.path(bowlingPinPath);
             pin.attr({ fill: colorOffWhite, stroke: colorDimWhite, strokeWidth: 1 });
-            function moveBowlingPinsToMachine() {
-                pinGroup.transform('scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')');
-            }
-            function animateBowlingPinsToMachine() {
-                pinGroup.animate({ transform: 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')' });
-            }
-            let myAnimateBowlingPinsToMachine = {};
-
-            pinAnimations.push([pinGroup, 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')']);
+            
+            if (isMovable) {pinAnimations.push([pinGroup, 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')'])};
             function moveBowlingPinsToFormation() {
                 const leftmargin = 870;
                 const topmargin = 430;
@@ -134,10 +134,7 @@ function runPachinko() {
                 let pinPositions = [[], [leftmargin + rowWidth * 3, topmargin + rowHeight * 3], [leftmargin + rowWidth * 2, topmargin + rowHeight * 2], [leftmargin + rowWidth * 4, topmargin + rowHeight * 2], [leftmargin + rowWidth, topmargin + rowHeight], [leftmargin + rowWidth * 3, topmargin + rowHeight], [leftmargin + rowWidth * 5, topmargin + rowHeight], [leftmargin, topmargin], [leftmargin + rowWidth * 2, topmargin], [leftmargin + rowWidth * 4, topmargin], [leftmargin + rowWidth * 6, topmargin]];
                 pinGroup.transform('scale(' + pinScale + ',' + pinScale + ') translate(' + pinPositions[pinMap[bowlingPinNumber]][0] + ',' + pinPositions[pinMap[bowlingPinNumber]][1] + ')');
             }
-            // myPaper.pinsgroup.add(pin);
-            //pin.click();
             moveBowlingPinsToFormation();
-            //moveBowlingPinsToMachine();
             pinGroup.append(pin);
             let labelText = pinMap[bowlingPinNumber];
             let textLabel = myPaper.text(9, 22, '' + labelText);
@@ -148,14 +145,15 @@ function runPachinko() {
             pinGroup.appendTo(pinsGroups)
             .data("bowlingPinNumber",bowlingPinNumber)
             .click(function () {
-                pinAnimations.forEach(pinGroupTuple => {
-                    //pinGroupTuple[0].animate({transform:(pinGroupTuple[1])});
-                    pinGroupTuple[0].animate({ transform: pinGroupTuple[1] },300,mina.easein);
-                });
+                movePinsToColumns();
             });
-        });
-        pinsGroups.click(function () {
-        });
+        }
+        function movePinsToColumns(){
+            pinAnimations.forEach(pinGroupTuple => {
+                //pinGroupTuple[0].animate({transform:(pinGroupTuple[1])});
+                pinGroupTuple[0].animate({ transform: pinGroupTuple[1] },300,mina.easein);
+            });
+        }
         //Buckets / Pipes
         makeQuickNumberedArray(10).forEach(bucketNumber => {
             const bucketScaleHorizontal = 163;
