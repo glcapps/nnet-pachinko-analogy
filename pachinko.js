@@ -22,6 +22,11 @@ function runPachinko() {
         if (startoutset == 0 || startoutset > endoutset) return "";
         return str.slice(startoutset + start.length, endoutset);
     }
+    function shuffleArray(array) {
+        return array.map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value)
+    }
     function getHereDocFromCodeBlock(func) {
         let here = "HEREDOC";
         return getStringBetween(func.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
