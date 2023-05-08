@@ -113,13 +113,13 @@ function runPachinko() {
 
         //Balls
         let ballsGroup = myPaper.group();
-        makeQuickNumberedArray(270).forEach(ballNumber => {
+        makeQuickNumberedArray(360).forEach(ballNumber => {
             let ballGroup = myPaper.group();
             let ball = Snap.parse(BallFragmentString());
             ballGroup.append(ball);
             ballAnimations.push([ballGroup,
-                'scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')',
-                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')',
+                'scale(' + 1 + ',' + 1 + ') translate(' + ((Math.sin(ballNumber*Math.PI/180) * 1900)) + ',' + ((Math.cos(ballNumber*Math.PI/180) * 1000)) + ')',
+                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 9 + ')',
                 'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')'
             ]);
             // ballGroup.transform('scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')');
