@@ -81,6 +81,11 @@ function runPachinko() {
             let buttonGroup = myPaper.group();
             let button = Snap.parse(ButtonFragmentString());
             buttonGroup.append(button);
+            const labels = ["five","four","three","two","one"];
+            let textLabel = myPaper.text(9, 22, labels[buttonNumber]);
+            textLabel.attr({ stroke: '#000000' });
+            textLabel.transform('scale(' + 2.2 + ',' + 2.2 + ') translate(' + (40) + ',' + 24 + ')');
+            textLabel.appendTo(buttonGroup);
             buttonGroup.transform('scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 730) + ',' + (buttonNumber * 71 + 100) + ')');
             buttonGroup.appendTo(buttonsGroup);
         });
@@ -89,12 +94,12 @@ function runPachinko() {
         let ballsGroup = myPaper.group();
         makeQuickNumberedArray(270).forEach(ballNumber => {
             let ballGroup = myPaper.group();
-            let ball = Snap.parse(RedBallFragmentString());
+            let ball = Snap.parse(BallFragmentString());
             ballGroup.append(ball);
             ballGroup.transform('scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')');
             ballGroup.appendTo(ballsGroup);
         });
-
+        //Pegs
         makeQuickNumberedArray(10).forEach(x => {
             makeQuickNumberedArray(10).forEach(y => {
                 processPeg(Math.random(), (Math.random()), 'diamond', y, x);
@@ -159,8 +164,8 @@ function runPachinko() {
             bucketGroup.transform('scale(' + (1 / bucketScaleHorizontal) + ',-' + (1 / bucketScaleVertical) + ') translate(' + (900 + (bucketNumber * 10000)) + ',-' + ((120 * toppad) + ((70) * 1000)) + ')');
         });
 
-        //redballs
-        function RedBallFragmentString() {
+        //Balls
+        function BallFragmentString() {
             return getHereDocFromCodeBlock(function(){
             /*HEREDOC
             <linearGradient id="linearGradientRedBall" y2="535.22" gradientUnits="userSpaceOnUse" x2="605.71" y1="535.22"
