@@ -16,22 +16,11 @@ function runPachinko() {
     function makeQuickNumberedArray(Count) {
         return Array.apply(null, { length: Count }).map(Number.call, Number);
     }
-    function getStringBetweenRegex(str, start, end) {
-        str = str.replaceAll('\\', '{{{backslash}}}').replaceAll('\n', '{{{newline}}}');
-        str = str.replaceAll('*', '{{{asterisk}}}').replaceAll('/', '{{{forwardslash}}}');
-        let result = str.match(new RegExp(start + "(.*)" + end));
-        result = result[1];
-        result = result.replaceAll('{{{newline}}}', '\n');
-        result = result.replaceAll('{{{backslash}}}', '\\');
-        result = result.replaceAll('{{{asterisk}}}', '*');
-        result = result.replaceAll('{{{forwardslash}}}', '/');
-        return result;
-    }
     function getStringBetween(str, start, end) {
-        let i = str.indexOf(start),
-            j = str.indexOf(end, i + start.length);
-        if (i == 0 || i > j) return "";
-        return str.slice(i + start.length, j);
+        let startoutset = str.indexOf(start),
+            endoutset = str.indexOf(end, startoutset + start.length);
+        if (startoutset == 0 || startoutset > endoutset) return "";
+        return str.slice(startoutset + start.length, endoutset);
     }
     function getHereDocFromCodeBlock(func) {
         let here = "HEREDOC";
