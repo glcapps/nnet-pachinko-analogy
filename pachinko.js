@@ -86,7 +86,11 @@ function runPachinko() {
             textLabel.attr({ stroke: '#000000' });
             textLabel.transform('scale(' + 2.2 + ',' + 2.2 + ') translate(' + (40) + ',' + 24 + ')');
             textLabel.appendTo(buttonGroup);
-            buttonGroup.transform('scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 730) + ',' + (buttonNumber * 71 + 100) + ')');
+            buttonGroup.transform('scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 730) + ',' + (buttonNumber * 71 + 100) + ')')
+            .data("buttonNumber",buttonNumber)
+            .click(function () {
+                this.animate({transform: 'scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 130) + ',' + (40) + ')'}, 300, mina.easein);
+             });
             buttonGroup.appendTo(buttonsGroup);
         });
 
@@ -141,12 +145,16 @@ function runPachinko() {
             textLabel.transform('scale(' + 2 + ',' + 2 + ') translate(-' + (labelText - 10 ? 1 : 5) + ',' + 24 + ')');
             textLabel.appendTo(pinGroup);
             pinsGroups.add(pinGroup);
+            pinGroup.appendTo(pinsGroups)
+            .data("bowlingPinNumber",bowlingPinNumber)
+            .click(function () {
+                pinAnimations.forEach(pinGroupTuple => {
+                    //pinGroupTuple[0].animate({transform:(pinGroupTuple[1])});
+                    pinGroupTuple[0].animate({ transform: pinGroupTuple[1] },300,mina.easein);
+                });
+            });
         });
         pinsGroups.click(function () {
-            pinAnimations.forEach(pinGroupTuple => {
-                //pinGroupTuple[0].animate({transform:(pinGroupTuple[1])});
-                pinGroupTuple[0].transform(pinGroupTuple[1]);
-            });
         });
         //Buckets / Pipes
         makeQuickNumberedArray(10).forEach(bucketNumber => {
