@@ -56,6 +56,7 @@ function runPachinko() {
         let pinAnimations = [];
         let ballAnimations = [];
         let pegAnimations = [];
+        let pegLabelAnimations = [];
 
         function processPeg(weight, bias, activation, x, y) {
             let myDesignation = 'x' + x + 'y' + y;
@@ -69,13 +70,14 @@ function runPachinko() {
             peg.attr({ fill: colorMint + colorSuffixAplhaMed, stroke: colorBlack, strokeWidth: 3 });
             peg.appendTo(myGroup);
             let textLabel = myPaper.text(10, 25, (angle - 45) + '°');
-            textLabel.attr({});
+            textLabel.attr({fill:colorWhite+'00'});
             textLabel.transform('scale(' + 0.9 + ',' + 0.9 + ')');
+            pegLabelAnimations.push([textLabel,{fill:colorBlack}]);
             textLabel.appendTo(myGroup);
             //fixme (y-x) ?huh?
             myGroup.animate({ transform: 'translate(' + ((pegwidth + hspace) * x + myleftpad) + ',' + ((pegheight + vspace) * (y) + pegheight + toppad) + ')' }, 700, mina.bounce);
-            peg.animate({ transform: 'r(' + (angle + '') + ')' }, 700, mina.bounce);
-            pegAnimations.push([peg, { r: cornered }]);
+            // peg.animate({ transform: 'r(' + (angle + '') + ')' }, 700, mina.bounce);
+            pegAnimations.push([peg, { r: cornered },{ transform: 'r(' + (angle + '') + ')' }]);
             //peg.animate({ r: cornered }, 3000, mina.easein);
         }
         //init
@@ -102,7 +104,7 @@ function runPachinko() {
                         movePinsToColumns,
                         function () {
                             ballAnimations.forEach(myItem => {
-                                myItem[0].animate({ transform: myItem[2] }, 2000, mina.bounce);
+                                myItem[0].animate({ transform: myItem[2] }, 1000+(Math.random()*1000), mina.bounce);
                             });
                         },
                         function () {
@@ -111,7 +113,18 @@ function runPachinko() {
                             pegAnimations.forEach(pegTuple => {
                                 pegTuple[0].animate(pegTuple[1], 2000, mina.easein);
                             });
-                        }, function () { }][buttonNumber]();
+
+                        }, function () {
+                            pegLabelAnimations.forEach(pegLabelTuple => {
+                                //pegLabelTuple[0].attr({fill:colorOffWhite});
+                                Snap.animate(0, 2000, function (value) {pegLabelTuple[0].attr({fill:colorBlack})});
+                                //pegLabelTuple[0].animate({fill:"#000"},2000);
+                            });
+                            pegAnimations.forEach(pegTuple => {
+                                pegTuple[0].animate(pegTuple[2], 2000, mina.bounce);
+                            });
+
+                        }][buttonNumber]();
                 });
             buttonGroup.appendTo(buttonsGroup);
         });
