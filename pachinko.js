@@ -47,6 +47,7 @@ function runPachinko() {
         const raphaelBucketPath = "M21.589,6.787c-0.25-0.152-0.504-0.301-0.76-0.445c-3.832-2.154-8.234-3.309-9.469-1.319c-1.225,2.103,2.314,5.798,6.293,8.222c0.082,0.051,0.167,0.098,0.25,0.146c5.463-0.402,9.887,0.204,9.989,1.402c0.009,0.105-0.026,0.211-0.083,0.318c0.018-0.025,0.041-0.045,0.057-0.07C29.146,12.943,25.585,9.222,21.589,6.787zM10.337,7.166l-0.722,1.52c-4.339,2.747-6.542,6.193-5.484,8.625c0.19,0.438,0.482,0.812,0.846,1.137l0.456-0.959c-0.156-0.178-0.292-0.365-0.384-0.577c-0.732-1.682,0.766-4.188,3.707-6.417l-3.323,6.994c1.492,1.689,5.748,1.748,10.276,0.154c-0.037-0.354,0.032-0.722,0.232-1.049c0.485-0.796,1.523-1.048,2.319-0.563c0.795,0.486,1.048,1.522,0.562,2.319c-0.484,0.795-1.523,1.047-2.319,0.562c-0.154-0.094-0.281-0.213-0.394-0.344c-4.354,1.559-8.372,1.643-10.553,0.314c-0.214-0.131-0.403-0.279-0.58-0.436l-0.124,0.26c-1.088,1.785,1.883,4.916,5.23,6.957c3.347,2.039,7.493,3.246,8.552,1.502l7.77-10.204c-2.48,0.384-6.154-0.963-9.272-2.864C14.014,12.197,11.131,9.546,10.337,7.166z";
         const raphaelFlagPath = "M9.5,3v10c8,0,8,4,16,4V7C17.5,7,17.5,3,9.5,3z M6.5,29h2V3h-2V29z";
         const bowlingPinPath = "M 12.78 121.69 c -21.75 -33.15 -10.9 -55.3 -2.77 -71.89 c 0.69 -1.4 1.35 -2.76 2.22 -4.62 c 0.13 -0.29 0.28 -2.11 0.38 -4.77 c 0.1 -2.65 0.13 -5.97 0.01 -9.35 c -0.07 -2.2 -0.56 -4.64 -1.05 -7.1 C 10.12 16.69 8.65 9.32 15.93 3 C 16.45 2.56 17 2.15 17.59 1.8 c 2.83 -1.72 6.14 -2.14 9.25 -1.53 c 3.07 0.6 5.98 2.23 8.05 4.62 c 0.47 0.54 0.9 1.13 1.29 1.77 c 0.79 1.3 1.37 2.77 1.68 4.39 c 0.29 1.5 0.35 3.13 0.14 4.87 c -0.18 1.52 -0.45 3.29 -0.75 5.24 c -1.23 8.11 -2.96 19.52 -0.44 24.82 c 0.65 1.36 1.25 2.55 1.88 3.8 c 7.33 14.54 18.63 36.97 -2.69 72.03 c -0.41 0.68 -1.14 1.05 -1.88 1.05 v 0.01 h -19.4 C 13.89 122.88 13.15 122.4 12.78 121.69 L 12.78 121.69 Z M 17 40.56 h 14.23 c -0.14 -2.19 -0.09 -4.54 0.07 -6.93 H 17.08 C 17.11 36.15 17.08 38.54 17 40.56 L 17 40.56 Z M 32.55 47.19 H 16.15 c -0.53 1.14 -1.35 2.81 -2.2 4.54 c -7.59 15.49 -17.69 36.12 1.98 66.74 H 32.9 c 19.18 -32.36 8.7 -53.17 1.88 -66.7 c -0.73 -1.45 -1.42 -2.82 -1.93 -3.89 C 32.74 47.66 32.64 47.43 32.55 47.19 L 32.55 47.19 Z M 16.84 28.62 h 14.94 c 0.34 -2.85 0.76 -5.62 1.13 -8.11 c 0.29 -1.94 0.56 -3.7 0.73 -5.11 c 0.15 -1.29 0.11 -2.47 -0.09 -3.53 c -0.21 -1.11 -0.6 -2.09 -1.12 -2.95 c -0.24 -0.4 -0.53 -0.8 -0.86 -1.17 C 30.15 6.12 28.14 5.01 26 4.59 c -2.1 -0.41 -4.3 -0.15 -6.13 0.96 c -0.36 0.22 -0.71 0.47 -1.06 0.78 c -5.34 4.63 -4.12 10.74 -2.91 16.78 C 16.26 24.95 16.62 26.77 16.84 28.62 L 16.84 28.62 Z";
+        const checkPath = "M5.48 10.089l1.583-1.464c1.854.896 3.028 1.578 5.11 3.063 3.916-4.442 6.503-6.696 11.312-9.688l.515 1.186c-3.965 3.46-6.87 7.314-11.051 14.814-2.579-3.038-4.301-4.974-7.469-7.911zm12.52 3.317v6.594h-16v-16h15.141c.846-.683 1.734-1.341 2.691-2h-19.832v20h20v-11.509c-.656.888-1.318 1.854-2 2.915z"
 
         const pegwidth = 36;
         const pegheight = 36;
@@ -70,26 +71,36 @@ function runPachinko() {
             peg.attr({ fill: colorMint + colorSuffixAplhaMed, stroke: colorBlack, strokeWidth: 3 });
             peg.appendTo(myGroup);
             let textLabel = myPaper.text(10, 25, (angle - 45) + '°');
-            textLabel.attr({fill:colorWhite+'00'});
+            textLabel.attr({ fill: colorWhite + '00' });
             textLabel.transform('scale(' + 0.9 + ',' + 0.9 + ')');
-            pegLabelAnimations.push([textLabel,{fill:colorBlack}]);
+            pegLabelAnimations.push([textLabel, { fill: colorBlack }]);
             textLabel.appendTo(myGroup);
             //fixme (y-x) ?huh?
             myGroup.animate({ transform: 'translate(' + ((pegwidth + hspace) * x + myleftpad) + ',' + ((pegheight + vspace) * (y) + pegheight + toppad) + ')' }, 700, mina.bounce);
             // peg.animate({ transform: 'r(' + (angle + '') + ')' }, 700, mina.bounce);
-            pegAnimations.push([peg, { r: cornered },{ transform: 'r(' + (angle + '') + ')' }]);
+            pegAnimations.push([peg, { r: cornered }, { transform: 'r(' + (angle + '') + ')' }]);
             //peg.animate({ r: cornered }, 3000, mina.easein);
         }
         //init
         myPaper.clear();
 
+        //checkboxes behind button
+        makeQuickNumberedArray(5).forEach(checkboxNumber => {
+            const top = [60, 95, 130, 165, 200];
+            const checkboxScale = 1;
+            let checkboxGroup = myPaper.group();
+            let checkbox = myPaper.path(checkPath);
+            checkbox.attr({ fill: colorMarioGreen, stroke: colorBlack, strokeWidth: 1 });
+            checkbox.appendTo(checkboxGroup);
+            checkboxGroup.transform('scale(' + checkboxScale + ',' + checkboxScale + ') translate(620,' + top[checkboxNumber] + ')');
+        });
         //presentation buttons
         let buttonsGroup = myPaper.group();
         makeQuickNumberedArray(5).reverse().forEach(buttonNumber => {
             let buttonGroup = myPaper.group();
             let button = Snap.parse(ButtonFragmentString());
             buttonGroup.append(button);
-            const labels = ['one', 'two', 'three', 'four', 'five',];
+            const labels = ['one', 'two', 'three', 'four', 'five'];
             let textLabel = myPaper.text(17, 16, labels[buttonNumber]);
             textLabel.attr({ stroke: '#000000' });
             textLabel.transform('scale(' + 2.2 + ',' + 2.2 + ') translate(' + (40) + ',' + 24 + ')');
@@ -104,7 +115,7 @@ function runPachinko() {
                         movePinsToColumns,
                         function () {
                             ballAnimations.forEach(myItem => {
-                                myItem[0].animate({ transform: myItem[2] }, 1000+(Math.random()*1000), mina.bounce);
+                                myItem[0].animate({ transform: myItem[2] }, 1000 + (Math.random() * 1000), mina.bounce);
                             });
                         },
                         function () {
@@ -117,7 +128,7 @@ function runPachinko() {
                         }, function () {
                             pegLabelAnimations.forEach(pegLabelTuple => {
                                 //pegLabelTuple[0].attr({fill:colorOffWhite});
-                                Snap.animate(0, 2000, function (value) {pegLabelTuple[0].attr({fill:colorBlack})});
+                                Snap.animate(0, 2000, function (value) { pegLabelTuple[0].attr({ fill: colorBlack }) });
                                 //pegLabelTuple[0].animate({fill:"#000"},2000);
                             });
                             pegAnimations.forEach(pegTuple => {
@@ -136,7 +147,7 @@ function runPachinko() {
             let ball = Snap.parse(BallFragmentString());
             ballGroup.append(ball);
             ballAnimations.push([ballGroup,
-                'scale(' + 1 + ',' + 1 + ') translate(' + ((Math.sin(ballNumber*Math.PI/180) * 1900)) + ',' + ((Math.cos(ballNumber*Math.PI/180) * 1000)) + ')',
+                'scale(' + 1 + ',' + 1 + ') translate(' + ((Math.sin(ballNumber * Math.PI / 180) * 1900)) + ',' + ((Math.cos(ballNumber * Math.PI / 180) * 1000)) + ')',
                 'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 9 + ')',
                 'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')'
             ]);
