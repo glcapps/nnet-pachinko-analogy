@@ -83,24 +83,43 @@ function runPachinko() {
         }
         //init
         myPaper.clear();
+        let bouncePath = 'm12,200c200,126 112,170 77,180c160,122 430,210 400,170c48,17 65,540 65,-140';
+        var p = myPaper.path(bouncePath).attr({
+            fill: "none",
+            stroke: "#AAAAAA",
+            strokeWidth: 5
+        });
+        let testbox = myPaper.circle(0,0,10);
+        testbox.attr({ fill: colorWhite, stroke: colorBlack, strokeWidth: 3 });
+        let testboxgroup = myPaper.group();
+        testboxgroup.append(testbox);
+        let myPath = myPaper.path(bouncePath).attr({
+            fill: "none",
+            stroke: colorWhite,
+            strokeWidth: 5
+        });
+
+        testboxgroup.drawAtPath( myPath, 3000, { rotate: true, easing: mina.linear, reverse: false, drawpath: true, callback: function(){ } } );
+
 
         //checkboxes behind button
-        makeQuickNumberedArray(5).forEach(checkboxNumber => {
-            const top = [60, 95, 130, 165, 200];
-            const checkboxScale = 1;
+        makeQuickNumberedArray(6).forEach(checkboxNumber => {
+            const top = [60, 95, 130, 165, 200, 235];
+            const checkboxScale = '1';
             let checkboxGroup = myPaper.group();
             let checkbox = myPaper.path(checkPath);
-            checkbox.attr({ fill: colorMarioGreen, stroke: colorBlack, strokeWidth: 1 });
+            checkbox.attr({transform:'scale(1.1,1.1)'});
+            checkbox.attr({ fill: colorMarioGreen, stroke: colorBlack, strokeWidth: 0.5 });
             checkbox.appendTo(checkboxGroup);
-            checkboxGroup.transform('scale(' + checkboxScale + ',' + checkboxScale + ') translate(620,' + top[checkboxNumber] + ')');
+            checkboxGroup.transform('scale(' + checkboxScale + ',' + checkboxScale + ') translate(615,' + top[checkboxNumber] + ')');
         });
         //presentation buttons
         let buttonsGroup = myPaper.group();
-        makeQuickNumberedArray(5).reverse().forEach(buttonNumber => {
+        makeQuickNumberedArray(6).reverse().forEach(buttonNumber => {
             let buttonGroup = myPaper.group();
             let button = Snap.parse(ButtonFragmentString());
             buttonGroup.append(button);
-            const labels = ['one', 'two', 'three', 'four', 'five'];
+            const labels = ['one', 'two', 'three', 'four', 'five', 'six'];
             let textLabel = myPaper.text(17, 16, labels[buttonNumber]);
             textLabel.attr({ stroke: '#000000' });
             textLabel.transform('scale(' + 2.2 + ',' + 2.2 + ') translate(' + (40) + ',' + 24 + ')');
