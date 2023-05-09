@@ -83,13 +83,23 @@ function runPachinko() {
         }
         //init
         myPaper.clear();
-        let bouncePath = 'm12,200c200,126 112,170 77,180c160,122 430,210 400,170c48,17 65,540 65,-140';
+        let bouncePath = 'm212,70 C200,326 12,170 77,380 C160,122 430,110 200,200';
+        bouncePath = getHereDocFromCodeBlock(function () {
+            /*HEREDOC
+m212,70 
+C202,0 212,70 212,90 
+C200,86 312,170 312,180
+C200,486 42,570 412,580 
+C160,582 490,590 400,600
+C400,600 410,610 410,660
+            HEREDOC*/
+        });
         var p = myPaper.path(bouncePath).attr({
             fill: "none",
             stroke: "#AAAAAA",
             strokeWidth: 5
         });
-        let testbox = myPaper.circle(0,0,10);
+        let testbox = myPaper.circle(0, 0, 10);
         testbox.attr({ fill: colorWhite, stroke: colorBlack, strokeWidth: 3 });
         let testboxgroup = myPaper.group();
         testboxgroup.append(testbox);
@@ -99,7 +109,7 @@ function runPachinko() {
             strokeWidth: 5
         });
 
-        testboxgroup.drawAtPath( myPath, 3000, { rotate: true, easing: mina.linear, reverse: false, drawpath: true, callback: function(){ } } );
+        testboxgroup.drawAtPath(myPath, 3000, { rotate: true, easing: mina.linear, reverse: false, drawpath: true, callback: function () { } });
 
 
         //checkboxes behind button
@@ -108,7 +118,7 @@ function runPachinko() {
             const checkboxScale = '1';
             let checkboxGroup = myPaper.group();
             let checkbox = myPaper.path(checkPath);
-            checkbox.attr({transform:'scale(1.1,1.1)'});
+            checkbox.attr({ transform: 'scale(1.1,1.1)' });
             checkbox.attr({ fill: colorMarioGreen, stroke: colorBlack, strokeWidth: 0.5 });
             checkbox.appendTo(checkboxGroup);
             checkboxGroup.transform('scale(' + checkboxScale + ',' + checkboxScale + ') translate(615,' + top[checkboxNumber] + ')');
