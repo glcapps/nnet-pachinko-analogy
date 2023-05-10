@@ -58,6 +58,7 @@ function runPachinko() {
         let ballAnimations = [];
         let pegAnimations = [];
         let pegLabelAnimations = [];
+        let buckets = [];
 
         function processPeg(weight, bias, activation, x, y) {
             let myDesignation = 'x' + x + 'y' + y;
@@ -83,34 +84,40 @@ function runPachinko() {
         }
         //init
         myPaper.clear();
-        let bouncePath = 'm212,70 C200,326 12,170 77,380 C160,122 430,110 200,200';
-        bouncePath = getHereDocFromCodeBlock(function () {
+        let bouncePath = getHereDocFromCodeBlock(function () {
             /*HEREDOC
-m212,70 
-C202,0 212,70 212,90 
-C200,86 312,170 312,180
-C200,486 42,570 412,580 
-C160,582 490,590 400,600
-C400,600 410,610 410,660
+            m212,70 
+            C222,60 230,90 228,116
+            C230,120 235,159 239,161
+            C249,179 280,120 307,150
+            S313,180 280,273
+            C283,273 283,263 247,298
+            C247,298 287,328 284,348
+            C284,348 322,380 318,410
+            C284,410 322,430 283,470
+            C304,440 323,550 323,556
+            C323,526 466,540 466,590
+            C466,590 426,590 429,630
+            C439,640 409,610 409,730
             HEREDOC*/
+            /*IGNORE
+
+            S212,90 210,150
+            C200,486 42,520 412,530 
+            C160,532 490,590 400,600
+            C400,600 410,610 410,660
+            S 410,780 410,680
+            S 410,780 410,730
+            IGNORE*/
         });
-        var p = myPaper.path(bouncePath).attr({
-            fill: "none",
-            stroke: "#AAAAAA",
-            strokeWidth: 5
-        });
-        let testbox = myPaper.circle(0, 0, 10);
-        testbox.attr({ fill: colorWhite, stroke: colorBlack, strokeWidth: 3 });
+        let testbox = myPaper.circle(0, 0, 5).attr({ fill: colorWhite + "00", stroke: colorBlack + "00", strokeWidth: 3 });
         let testboxgroup = myPaper.group();
         testboxgroup.append(testbox);
-        let myPath = myPaper.path(bouncePath).attr({
+        var p = myPaper.path(bouncePath).attr({
             fill: "none",
-            stroke: colorWhite,
-            strokeWidth: 5
+            stroke: "#aaaaaa00",
+            strokeWidth: 0
         });
-
-        testboxgroup.drawAtPath(myPath, 3000, { rotate: true, easing: mina.linear, reverse: false, drawpath: true, callback: function () { } });
-
 
         //checkboxes behind button
         makeQuickNumberedArray(6).forEach(checkboxNumber => {
@@ -143,18 +150,31 @@ C400,600 410,610 410,660
                         //first slide moves pins to column headings
                         movePinsToColumns,
                         function () {
+                            //demo single ball down round peg pachinko
+                            let myPath = myPaper.path(bouncePath).attr({
+                                fill: "none", stroke: colorWhite + "00", strokeWidth: 1
+                            });
+                            testbox.attr({ fill: colorWhite, stroke: colorBlack, strokeWidth: 3 });
+                            testboxgroup.drawAtPath(myPath, 4500, { rotate: true, easing: mina.linear, reverse: false, drawpath: false, callback: function () { 
+                                //flash bucket
+                                    debugger;
+                                    Snap.animate(0, 1, function (value) {
+                                        buckets[6].attr({fill:value<1?colorWhite:colorMarioGreen});
+                                    }, 1500);
+                            } });
+                        },
+                        function () {
                             ballAnimations.forEach(myItem => {
                                 myItem[0].animate({ transform: myItem[2] }, 1000 + (Math.random() * 1000), mina.bounce);
                             });
                         },
                         function () {
-                            //demo single ball down round peg pachinko
-                        }, function () {
                             pegAnimations.forEach(pegTuple => {
                                 pegTuple[0].animate(pegTuple[1], 2000, mina.easein);
                             });
 
-                        }, function () {
+                        },
+                        function () {
                             pegLabelAnimations.forEach(pegLabelTuple => {
                                 //pegLabelTuple[0].attr({fill:colorOffWhite});
                                 Snap.animate(0, 2000, function (value) { pegLabelTuple[0].attr({ fill: colorBlack }) });
@@ -245,6 +265,7 @@ C400,600 410,610 410,660
             let bucket = myPaper.path(bucketPath);
             bucket.attr({ fill: colorMarioGreen });
             bucketGroup.append(bucket);
+            buckets[bucketNumber] = bucket;
             let labelText = pinMap[bucketNumber];
             let textLabel = myPaper.text(9, 22, '' + labelText);
             textLabel.attr({ stroke: colorWhite });
