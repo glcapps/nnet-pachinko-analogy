@@ -113,7 +113,7 @@ function runPachinko() {
         let testbox = myPaper.circle(0, 0, 5).attr({ fill: colorWhite + "00", stroke: colorBlack + "00", strokeWidth: 3 });
         let testboxgroup = myPaper.group();
         testboxgroup.append(testbox);
-        var p = myPaper.path(bouncePath).attr({
+        let p = myPaper.path(bouncePath).attr({
             fill: "none",
             stroke: "#aaaaaa00",
             strokeWidth: 0
@@ -186,22 +186,23 @@ function runPachinko() {
                                 pegTuple[0].animate(pegTuple[2], 2000, mina.bounce);
                             });
 
-                        }][buttonNumber]();
+                        },
+                        BounceBallToBuckets][buttonNumber]();
                 });
             buttonGroup.appendTo(buttonsGroup);
         });
 
         //Balls
         let ballsGroup = myPaper.group();
-        let columnPinOfFirstPlay =4; Math.floor(Math.random()*(pinMap.length+1));
+        let columnPinOfFirstPlay = 4; Math.floor(Math.random() * (pinMap.length + 1));
         makeQuickNumberedArray(360).forEach(ballNumber => {
             let ballGroup = myPaper.group();
             let ball = Snap.parse(BallFragmentString());
             ballGroup.append(ball);
             ballAnimations.push([ballGroup,
                 'scale(' + 1 + ',' + 1 + ') translate(' + ((Math.sin(ballNumber * Math.PI / 180) * 1900)) + ',' + ((Math.cos(ballNumber * Math.PI / 180) * 1000)) + ')',
-                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + ((Math.random() * 100 * 22) + (pinMap.indexOf(columnPinOfFirstPlay)*(pegwidth+hspace)/0.025)) + ',' + ballNumber * 9 + ')',
-                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + ballNumber * 11 + ')'
+                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + ((Math.random() * 100 * 22) + (pinMap.indexOf(columnPinOfFirstPlay) * (pegwidth + hspace) / 0.025)) + ',' + ballNumber * 9 + ')',
+                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + 600/0.025 + ')'
             ]);
             // ballGroup.transform('scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')');
             ballGroup.appendTo(ballsGroup);
@@ -211,21 +212,18 @@ function runPachinko() {
         });
         function MoveBallsToColumns(targetColumnArray) {
             if (targetColumnArray == undefined) { targetColumnArray = makeQuickNumberedArray(10) }
+
+            ballAnimations.forEach(myItem => {
+                myItem[0].transform(myItem[2]);
+            });
         }
-        function BounceBallToBuckets(){
+        function BounceBallToBuckets() {
             let myBouncePath = getHereDocFromCodeBlock(function () {
                 /*HEREDOC
                 m212,70 
                 C222,60 230,90 228,116
                 C230,120 235,159 239,161
                 C249,179 280,120 307,150
-                S313,180 280,273
-                C283,273 283,263 247,298
-                C247,298 287,328 284,348
-                C284,348 322,380 318,410
-                C284,410 322,430 283,470
-                C304,440 323,550 323,556
-                C323,526 466,540 466,590
                 C466,590 426,590 429,630
                 C439,640 409,610 409,730
                 HEREDOC*/
@@ -238,6 +236,21 @@ function runPachinko() {
                 S 410,780 410,680
                 S 410,780 410,730
                 IGNORE*/
+            });
+            ballAnimations.forEach(myItem => {
+                let myPath = myPaper.path(myBouncePath).attr({
+                    fill: "none", stroke: colorWhite + "00", strokeWidth: 1
+                });
+                debugger;
+                let thisGContainer = myPaper.group();
+                thisGContainer.append(myItem[0]);
+                thisGContainer.drawAtPath(myPath, 4500, {
+                    rotate: true, easing: mina.linear, reverse: false, drawpath: false, callback: function () {
+                        //flash bucket
+                        debugger;
+                    }
+                });
+                // myItem[0].animate({ transform: myItem[3] }, 1000 + (Math.random() * 1000), mina.bounce);
             });
         }
         //Pegs
