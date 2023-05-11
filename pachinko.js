@@ -149,7 +149,6 @@ function runPachinko() {
                             testboxgroup.drawAtPath(myPath, 4500, {
                                 rotate: true, easing: mina.linear, reverse: false, drawpath: false, callback: function () {
                                     //flash bucket
-                                    debugger;
                                     Snap.animate(0, 1, function (value) {
                                         buckets[6].attr({ fill: value < 1 ? colorWhite : colorMarioGreen });
                                     }, 1500);
@@ -193,7 +192,7 @@ function runPachinko() {
             ballAnimations.push([ballGroup,
                 'scale(' + 1 + ',' + 1 + ') translate(' + ((Math.sin(ballNumber * Math.PI / 180) * 1900)) + ',' + ((Math.cos(ballNumber * Math.PI / 180) * 1000)) + ')',
                 'scale(' + 0.025 + ',' + 0.025 + ') translate(' + ((Math.random() * 100 * 22) + (pinMap.indexOf(columnPinOfFirstPlay) * (pegwidth + hspace) / 0.025)) + ',' + ballNumber * 9 + ')',
-                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + 600/0.025 + ')'
+                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + 600 / 0.025 + ')'
             ]);
             // ballGroup.transform('scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')');
             ballGroup.appendTo(ballsGroup);
@@ -219,57 +218,83 @@ function runPachinko() {
                 C439,640 409,610 409,730
                 HEREDOC*/
             });
-            function getNextPegDestination(currentColumn, currentRow, travelDirectionAngle){
+            function getNextPegDestination(currentColumn, currentRow, priorColumn, PriorRow) {
                 //loop from two rows down until one row above and from middle column outward to find a viable destination
-                let lowestPotentialRow = Math.max(0, currentRow-1);
+                let lowestPotentialRow = Math.max(1, currentRow - 1);
                 let highestPotentialRow = Math.min(currentRow + 2, 10);
                 let lowestPotentialColumn = Math.max(0, currentColumn - 3);
                 let highestPotentialColumn = Math.min(currentColumn + 3, 10);
-                
+                let viablePotentials = [];
+                let topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 0 };
+                makeQuickNumberedArray(highestPotentialRow).reverse().forEach(myRow => {
+                    if (myRow > highestPotentialRow || myRow < lowestPotentialRow) return;
+                    makeQuickNumberedArray(highestPotentialColumn).forEach(myColumn => {
+                        if (myColumn > highestPotentialColumn || myColumn < lowestPotentialColumn) return;
+                        //we cannot cross directly through a peg
+                        if (priorColumn > currentColumn && myColumn < currentColumn && myRow != currentRow) return;
+                        if (priorColumn > currentColumn && myColumn > currentColumn && myRow != currentRow) return;
+                        let myPreferenceIndex = Math.abs(7 - myColumn) + myColumn + (myRow * 2) + Math.floor(Math.random() * 2 - (Math.abs(myColumn - currentColumn)))
+                        //FIXME add preference for staying on left or right if prior is same combined with peg angle 
+                        if (currentRow == 11) {
+                            topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 999999 }
+                        } else {
+                            if (myPreferenceIndex > topPotential.PreferenceIndex) { topPotential = { Column: myColumn, Row: myRow, PreferenceIndex: myPreferenceIndex } };
+                            viablePotentials.push({ Column: myColumn, Row: myRow, Preferenceindex: myPreferenceIndex });
+                        }
+                    });
+                });
+                return [topPotential, viablePotentials];
             }
-            function getNextImpactPoint(currentX, currentY, priorX, priorY){
+            let myMovementSequence = [];
+            makeQuickNumberedArray(30).forEach(mystep => {
+                if (myStep == 1) {
+                    myMovementSequence.push([3, 0]);//initial prior
+                    myMovementSequence.push([3, 0]);//initial current
+                }
+                myMovementSequence.push(getNextPegDestination(myMovementSequence[myMovementSequence.length][0], myMovementSequence[myMovementSequence.length][1], myMovementSequence[myMovementSequence.length-1][0], myMovementSequence[myMovementSequence.length-1][1]));
+            });
+            console.log(getNextPegDestination(3, 0, 3, 0));
+            function getNextImpactPoint(currentX, currentY, priorX, priorY) {
                 let myangle = getImpactDepartureAngle(currentX, currentY, priorX, priorY);
                 let myHitPeg = getImpactedPeg(currentX, currentY);
                 let travelangle = myangle;
                 let myNextPeg = getNextIntersectingPegContactPoint(currentX, currentY, travelAngle);
                 let nextX = 0;
                 let nextY = 0;
-                return [nextX,nextY];
+                return [nextX, nextY];
             }
-            function getImpactDepartureAngle(currentX, currentY, priorX, priorY){
+            function getImpactDepartureAngle(currentX, currentY, priorX, priorY) {
                 return 305; //FIXME
             }
-            function getImpactedPeg(currentX, currentY){
+            function getImpactedPeg(currentX, currentY) {
                 let row = 0;
                 let column = 2;
-                return [row,column];
+                return [row, column];
             }
-            function getImpactAngle(pegRow, pegColumn){
-               let angle = -45;
-               return angle; 
+            function getImpactAngle(pegRow, pegColumn) {
+                let angle = -45;
+                return angle;
             }
-            function getNextIntersectingPegContactPoint(currentX, currentY, travelAngle){
+            function getNextIntersectingPegContactPoint(currentX, currentY, travelAngle) {
                 let impactX = 0;
                 let impactY = 0;
-                return [impactX,impactY];
+                return [impactX, impactY];
             }
 
             myBouncePath = '',
-            ballAnimations.forEach(myItem => {
-                let myPath = myPaper.path(myBouncePath).attr({
-                    fill: "none", stroke: colorWhite + "00", strokeWidth: 1
+                ballAnimations.forEach(myItem => {
+                    let myPath = myPaper.path(myBouncePath).attr({
+                        fill: "none", stroke: colorWhite + "00", strokeWidth: 1
+                    });
+                    let thisGContainer = myPaper.group();
+                    thisGContainer.append(myItem[0]);
+                    thisGContainer.drawAtPath(myPath, 4500, {
+                        rotate: true, easing: mina.linear, reverse: false, drawpath: false, callback: function () {
+                            //flash bucket
+                        }
+                    });
+                    // myItem[0].animate({ transform: myItem[3] }, 1000 + (Math.random() * 1000), mina.bounce);
                 });
-                debugger;
-                let thisGContainer = myPaper.group();
-                thisGContainer.append(myItem[0]);
-                thisGContainer.drawAtPath(myPath, 4500, {
-                    rotate: true, easing: mina.linear, reverse: false, drawpath: false, callback: function () {
-                        //flash bucket
-                        debugger;
-                    }
-                });
-                // myItem[0].animate({ transform: myItem[3] }, 1000 + (Math.random() * 1000), mina.bounce);
-            });
         }
         //Pegs
         makeQuickNumberedArray(10).forEach(x => {
