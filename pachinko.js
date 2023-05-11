@@ -100,15 +100,6 @@ function runPachinko() {
             C466,590 426,590 429,630
             C439,640 409,610 409,730
             HEREDOC*/
-            /*IGNORE
-
-            S212,90 210,150
-            C200,486 42,520 412,530 
-            C160,532 490,590 400,600
-            C400,600 410,610 410,660
-            S 410,780 410,680
-            S 410,780 410,730
-            IGNORE*/
         });
         let testbox = myPaper.circle(0, 0, 5).attr({ fill: colorWhite + "00", stroke: colorBlack + "00", strokeWidth: 3 });
         let testboxgroup = myPaper.group();
@@ -227,16 +218,43 @@ function runPachinko() {
                 C466,590 426,590 429,630
                 C439,640 409,610 409,730
                 HEREDOC*/
-                /*IGNORE
-    
-                S212,90 210,150
-                C200,486 42,520 412,530 
-                C160,532 490,590 400,600
-                C400,600 410,610 410,660
-                S 410,780 410,680
-                S 410,780 410,730
-                IGNORE*/
             });
+            function getNextPegDestination(currentColumn, currentRow, travelDirectionAngle){
+                //loop from two rows down until one row above and from middle column outward to find a viable destination
+                let lowestPotentialRow = Math.max(0, currentRow-1);
+                let highestPotentialRow = Math.min(currentRow + 2, 10);
+                let lowestPotentialColumn = Math.max(0, currentColumn - 3);
+                let highestPotentialColumn = Math.min(currentColumn + 3, 10);
+                
+            }
+            function getNextImpactPoint(currentX, currentY, priorX, priorY){
+                let myangle = getImpactDepartureAngle(currentX, currentY, priorX, priorY);
+                let myHitPeg = getImpactedPeg(currentX, currentY);
+                let travelangle = myangle;
+                let myNextPeg = getNextIntersectingPegContactPoint(currentX, currentY, travelAngle);
+                let nextX = 0;
+                let nextY = 0;
+                return [nextX,nextY];
+            }
+            function getImpactDepartureAngle(currentX, currentY, priorX, priorY){
+                return 305; //FIXME
+            }
+            function getImpactedPeg(currentX, currentY){
+                let row = 0;
+                let column = 2;
+                return [row,column];
+            }
+            function getImpactAngle(pegRow, pegColumn){
+               let angle = -45;
+               return angle; 
+            }
+            function getNextIntersectingPegContactPoint(currentX, currentY, travelAngle){
+                let impactX = 0;
+                let impactY = 0;
+                return [impactX,impactY];
+            }
+
+            myBouncePath = '',
             ballAnimations.forEach(myItem => {
                 let myPath = myPaper.path(myBouncePath).attr({
                     fill: "none", stroke: colorWhite + "00", strokeWidth: 1
