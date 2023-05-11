@@ -246,8 +246,8 @@ function runPachinko() {
                 return [topPotential, viablePotentials];
             }
             let myMovementSequence = [];
-            makeQuickNumberedArray(30).forEach(mystep => {
-                if (myStep == 1) {
+            makeQuickNumberedArray(30).forEach(myItem => {
+                if (myMovementSequence.length == 0) {
                     myMovementSequence.push([3, 0]);//initial prior
                     myMovementSequence.push([3, 0]);//initial current
                 }
