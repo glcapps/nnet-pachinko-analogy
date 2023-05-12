@@ -10,6 +10,7 @@ function runPachinko() {
     const colorDimWhite = '#AAAAAA';
     const colorBlack = '#000000';
     const colorMint = '#BADA55';
+    const colorBrightRed = '#D10F18';
     const colorSuffixAplhaMed = 'AA';
 
     //utility functions
@@ -185,17 +186,21 @@ function runPachinko() {
         //Balls
         let ballsGroup = myPaper.group();
         let columnPinOfFirstPlay = 4; Math.floor(Math.random() * (pinMap.length + 1));
-        makeQuickNumberedArray(360).forEach(ballNumber => {
+        makeQuickNumberedArray(360 - 358).forEach(ballNumber => {
             let ballGroup = myPaper.group();
-            let ball = Snap.parse(BallFragmentString());
+            // let ball = Snap.parse(BallFragmentString());
+            let ball = myPaper.circle(250, 250, 250).attr({
+                fill: colorBrightRed, stroke: colorBlack, strokeWidth: 10
+            });
             ballGroup.append(ball);
+            ballGroup.appendTo(ballsGroup);
             ballAnimations.push([ballGroup,
                 'scale(' + 1 + ',' + 1 + ') translate(' + ((Math.sin(ballNumber * Math.PI / 180) * 1900)) + ',' + ((Math.cos(ballNumber * Math.PI / 180) * 1000)) + ')',
                 'scale(' + 0.025 + ',' + 0.025 + ') translate(' + ((Math.random() * 100 * 22) + (pinMap.indexOf(columnPinOfFirstPlay) * (pegwidth + hspace) / 0.025)) + ',' + ballNumber * 9 + ')',
                 'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + 600 / 0.025 + ')'
             ]);
             // ballGroup.transform('scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')');
-            ballGroup.appendTo(ballsGroup);
+
         });
         ballAnimations.forEach(myItem => {
             myItem[0].transform(myItem[1]);
@@ -229,6 +234,7 @@ function runPachinko() {
                 makeQuickNumberedArray(highestPotentialRow).reverse().forEach(myRow => {
                     if (myRow > highestPotentialRow || myRow < lowestPotentialRow) return;
                     makeQuickNumberedArray(highestPotentialColumn).forEach(myColumn => {
+                        if (myColumn < 1 || myColumn > 9) return;
                         if (myColumn > highestPotentialColumn || myColumn < lowestPotentialColumn) return;
                         //we cannot cross directly through a peg
                         if (priorColumn > currentColumn && myColumn < currentColumn && myRow != currentRow) return;
@@ -243,7 +249,7 @@ function runPachinko() {
                         }
                     });
                 });
-                return [topPotential, viablePotentials];
+                return [topPotential, viablePotentials, [topPotential.Column, topPotential.Row]];
             }
             let myMovementSequence = [];
             makeQuickNumberedArray(30).forEach(myItem => {
@@ -251,8 +257,65 @@ function runPachinko() {
                     myMovementSequence.push([3, 0]);//initial prior
                     myMovementSequence.push([3, 0]);//initial current
                 }
-                myMovementSequence.push(getNextPegDestination(myMovementSequence[myMovementSequence.length][0], myMovementSequence[myMovementSequence.length][1], myMovementSequence[myMovementSequence.length-1][0], myMovementSequence[myMovementSequence.length-1][1]));
+                myMovementSequence.push(
+                    getNextPegDestination(
+                        myMovementSequence[myMovementSequence.length - 1][0], myMovementSequence[myMovementSequence.length - 1][1], myMovementSequence[myMovementSequence.length - 2][0], myMovementSequence[myMovementSequence.length - 2][1])[2]);
             });
+            function getPegPathFromPegDestinations(pegList) {
+                let thisPath = makeQuickNumberedArray(pegList.length)
+                thisPath.forEach(destinationNumber => {
+                    let thispeglocation = [pegList[destinationNumber][0]*80,pegList[destinationNumber][1]*80];
+                    if (destinationNumber == 0) { thisPath[destinationNumber] = 'm' + thispeglocation[0]+',80' };
+                    if (destinationNumber > 0) {
+                        let priorpeglocation = [pegList[destinationNumber-1][0]*80,pegList[destinationNumber-1][1]*70+80];
+                        thisPath[destinationNumber] = ('C' + priorpeglocation.join(',') + ' ' + priorpeglocation.join(',') + ' ' + thispeglocation.join(',') + ' ' );
+                    }
+                });
+                return thisPath.join(' '); //FIXME
+            }
+            let bouncePath = getPegPathFromPegDestinations(myMovementSequence);
+            let medCopyBallAnimations = [];
+            ballAnimations.forEach(function (ba) {
+                medCopyBallAnimations.push(ba[0]);
+            });
+            function launchSubgroup(items) {
+                if (medCopyBallAnimations.length > 0) {
+                    let filteredArray = [];
+                    let testCircle = myPaper.circle(250, 250, 250).attr({
+                        fill: colorBrightRed, stroke: colorBlack, strokeWidth: 10
+                    });
+                    let testCircleGroup = myPaper.group();
+                    testCircleGroup.attr({
+                        transform: 'scale(0.025,0.025)', strokeWidth: 10
+                    });
+                    // items[0].append(testCircle);
+                    testCircleGroup.append(testCircle);
+                    filteredArray.push(testCircleGroup);
+                    filteredArray.forEach(function (animationItem) {
+                        let thisBallGroup = myPaper.group();
+                        thisBallGroup.append(animationItem);
+                        let myPath = myPaper.path(bouncePath)
+                            .attr({
+                                fill: "none", stroke: colorWhite, strokeWidth: 1
+                            });
+                        thisBallGroup.drawAtPath(myPath, 2000, {
+                            rotate: true, easing: mina.linear, reverse: false, drawpath: true, callback: function () {
+                                //flash bucket
+                                // Snap.animate(0, 1, function (value) {
+                                //     buckets[6].attr({ fill: value < 1 ? colorWhite : colorMarioGreen });
+                                // }, 10);
+                                //launchSubgroup();
+                            }
+                        });
+                    });
+                }
+            }
+            let subgroup = [];
+            subgroup.push(medCopyBallAnimations.pop())
+            launchSubgroup(subgroup);
+
+
+
             console.log(getNextPegDestination(3, 0, 3, 0));
             function getNextImpactPoint(currentX, currentY, priorX, priorY) {
                 let myangle = getImpactDepartureAngle(currentX, currentY, priorX, priorY);
