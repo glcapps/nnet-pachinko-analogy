@@ -11,6 +11,7 @@ function runPachinko() {
     const colorBlack = '#000000';
     const colorMint = '#BADA55';
     const colorBrightRed = '#D10F18';
+    const colorLightRed = '#f9545b';
     const colorSuffixAplhaMed = 'AA';
 
     //utility functions
@@ -186,11 +187,12 @@ function runPachinko() {
         //Balls
         let ballsGroup = myPaper.group();
         let columnPinOfFirstPlay = 4; Math.floor(Math.random() * (pinMap.length + 1));
-        makeQuickNumberedArray(360 - 358).forEach(ballNumber => {
+        let myRedRadialGradient = myPaper.gradient("r(0.5, 0.5, 0.8)" + colorLightRed + "-" + colorBrightRed + "-" + colorDimWhite);
+        makeQuickNumberedArray(360).forEach(ballNumber => {
             let ballGroup = myPaper.group();
             // let ball = Snap.parse(BallFragmentString());
             let ball = myPaper.circle(250, 250, 250).attr({
-                fill: colorBrightRed, stroke: colorBlack, strokeWidth: 10
+                fill: myRedRadialGradient, stroke: colorBlack, strokeWidth: 10
             });
             ballGroup.append(ball);
             ballGroup.appendTo(ballsGroup);
@@ -264,11 +266,11 @@ function runPachinko() {
             function getPegPathFromPegDestinations(pegList) {
                 let thisPath = makeQuickNumberedArray(pegList.length)
                 thisPath.forEach(destinationNumber => {
-                    let thispeglocation = [pegList[destinationNumber][0]*80,pegList[destinationNumber][1]*80];
-                    if (destinationNumber == 0) { thisPath[destinationNumber] = 'm' + thispeglocation[0]+',80' };
+                    let thispeglocation = [pegList[destinationNumber][0] * 80, pegList[destinationNumber][1] * 80];
+                    if (destinationNumber == 0) { thisPath[destinationNumber] = 'm' + thispeglocation[0] + ',80' };
                     if (destinationNumber > 0) {
-                        let priorpeglocation = [pegList[destinationNumber-1][0]*80,pegList[destinationNumber-1][1]*70+80];
-                        thisPath[destinationNumber] = ('C' + priorpeglocation.join(',') + ' ' + priorpeglocation.join(',') + ' ' + thispeglocation.join(',') + ' ' );
+                        let priorpeglocation = [pegList[destinationNumber - 1][0] * 80, pegList[destinationNumber - 1][1] * 70 + 80];
+                        thisPath[destinationNumber] = ('C' + priorpeglocation.join(',') + ' ' + priorpeglocation.join(',') + ' ' + thispeglocation.join(',') + ' ');
                     }
                 });
                 return thisPath.join(' '); //FIXME
