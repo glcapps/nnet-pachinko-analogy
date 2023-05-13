@@ -1,53 +1,146 @@
 window.runPachinko = runPachinko;
+const bucketPath = "M4424.5,5004.6c-1455-78.5-2647.8-363.8-3407.8-813.7C444.3,3852.1,138,3438.5,103.5,2958c-28.7-388.6,118.7-729.4,455.7-1056.8l151.2-147.4V-501.5c0-1981.5,3.8-2272.5,30.6-2402.7c197.2-959.2,1468.4-1642.6,3434.6-1845.6c314-32.6,1332.5-32.6,1646.5,0c1139.1,118.7,2031.3,388.6,2651.6,804.1c325.5,218.3,559.1,472.9,687.3,750.5c130.2,285.3,126.4,189.6,126.4,2693.7v2255.3l151.3,147.4c384.8,373.3,528.4,781.1,432.7,1231C9656.9,4145,8071.7,4853.4,5688.1,4998.9C5402.9,5016.1,4692.6,5019.9,4424.5,5004.6z M6051.9,3744.9c970.7-95.7,1834.1-323.5,2345.3-620.3c124.4-72.8,277.6-204.9,277.6-239.3c0-70.8-271.8-269.9-530.3-386.7c-1435.9-654.8-4164-727.5-5892.8-158.9c-321.6,107.2-706.5,298.7-834.7,415.4c-99.5,91.9-101.5,95.7-74.7,145.5c40.2,78.5,233.6,214.4,449.9,317.8c593.5,287.2,1485.7,484.4,2488.9,555.2C4635.1,3796.6,5697.7,3781.2,6051.9,3744.9z";
+const raphaelBucketPath = "M21.589,6.787c-0.25-0.152-0.504-0.301-0.76-0.445c-3.832-2.154-8.234-3.309-9.469-1.319c-1.225,2.103,2.314,5.798,6.293,8.222c0.082,0.051,0.167,0.098,0.25,0.146c5.463-0.402,9.887,0.204,9.989,1.402c0.009,0.105-0.026,0.211-0.083,0.318c0.018-0.025,0.041-0.045,0.057-0.07C29.146,12.943,25.585,9.222,21.589,6.787zM10.337,7.166l-0.722,1.52c-4.339,2.747-6.542,6.193-5.484,8.625c0.19,0.438,0.482,0.812,0.846,1.137l0.456-0.959c-0.156-0.178-0.292-0.365-0.384-0.577c-0.732-1.682,0.766-4.188,3.707-6.417l-3.323,6.994c1.492,1.689,5.748,1.748,10.276,0.154c-0.037-0.354,0.032-0.722,0.232-1.049c0.485-0.796,1.523-1.048,2.319-0.563c0.795,0.486,1.048,1.522,0.562,2.319c-0.484,0.795-1.523,1.047-2.319,0.562c-0.154-0.094-0.281-0.213-0.394-0.344c-4.354,1.559-8.372,1.643-10.553,0.314c-0.214-0.131-0.403-0.279-0.58-0.436l-0.124,0.26c-1.088,1.785,1.883,4.916,5.23,6.957c3.347,2.039,7.493,3.246,8.552,1.502l7.77-10.204c-2.48,0.384-6.154-0.963-9.272-2.864C14.014,12.197,11.131,9.546,10.337,7.166z";
+const raphaelFlagPath = "M9.5,3v10c8,0,8,4,16,4V7C17.5,7,17.5,3,9.5,3z M6.5,29h2V3h-2V29z";
+const bowlingPinPath = "M 12.78 121.69 c -21.75 -33.15 -10.9 -55.3 -2.77 -71.89 c 0.69 -1.4 1.35 -2.76 2.22 -4.62 c 0.13 -0.29 0.28 -2.11 0.38 -4.77 c 0.1 -2.65 0.13 -5.97 0.01 -9.35 c -0.07 -2.2 -0.56 -4.64 -1.05 -7.1 C 10.12 16.69 8.65 9.32 15.93 3 C 16.45 2.56 17 2.15 17.59 1.8 c 2.83 -1.72 6.14 -2.14 9.25 -1.53 c 3.07 0.6 5.98 2.23 8.05 4.62 c 0.47 0.54 0.9 1.13 1.29 1.77 c 0.79 1.3 1.37 2.77 1.68 4.39 c 0.29 1.5 0.35 3.13 0.14 4.87 c -0.18 1.52 -0.45 3.29 -0.75 5.24 c -1.23 8.11 -2.96 19.52 -0.44 24.82 c 0.65 1.36 1.25 2.55 1.88 3.8 c 7.33 14.54 18.63 36.97 -2.69 72.03 c -0.41 0.68 -1.14 1.05 -1.88 1.05 v 0.01 h -19.4 C 13.89 122.88 13.15 122.4 12.78 121.69 L 12.78 121.69 Z M 17 40.56 h 14.23 c -0.14 -2.19 -0.09 -4.54 0.07 -6.93 H 17.08 C 17.11 36.15 17.08 38.54 17 40.56 L 17 40.56 Z M 32.55 47.19 H 16.15 c -0.53 1.14 -1.35 2.81 -2.2 4.54 c -7.59 15.49 -17.69 36.12 1.98 66.74 H 32.9 c 19.18 -32.36 8.7 -53.17 1.88 -66.7 c -0.73 -1.45 -1.42 -2.82 -1.93 -3.89 C 32.74 47.66 32.64 47.43 32.55 47.19 L 32.55 47.19 Z M 16.84 28.62 h 14.94 c 0.34 -2.85 0.76 -5.62 1.13 -8.11 c 0.29 -1.94 0.56 -3.7 0.73 -5.11 c 0.15 -1.29 0.11 -2.47 -0.09 -3.53 c -0.21 -1.11 -0.6 -2.09 -1.12 -2.95 c -0.24 -0.4 -0.53 -0.8 -0.86 -1.17 C 30.15 6.12 28.14 5.01 26 4.59 c -2.1 -0.41 -4.3 -0.15 -6.13 0.96 c -0.36 0.22 -0.71 0.47 -1.06 0.78 c -5.34 4.63 -4.12 10.74 -2.91 16.78 C 16.26 24.95 16.62 26.77 16.84 28.62 L 16.84 28.62 Z";
+const checkPath = "M5.48 10.089l1.583-1.464c1.854.896 3.028 1.578 5.11 3.063 3.916-4.442 6.503-6.696 11.312-9.688l.515 1.186c-3.965 3.46-6.87 7.314-11.051 14.814-2.579-3.038-4.301-4.974-7.469-7.911zm12.52 3.317v6.594h-16v-16h15.141c.846-.683 1.734-1.341 2.691-2h-19.832v20h20v-11.509c-.656.888-1.318 1.854-2 2.915z"
+
+const colorMarioGreen = '#2CB01A';
+const colorWhite = '#FFFFFF';
+const colorOffWhite = '#DDDDDD';
+const colorDimWhite = '#AAAAAA';
+const colorBlack = '#000000';
+const colorMint = '#BADA55';
+const colorBrightRed = '#D10F18';
+const colorLightRed = '#f9545b';
+const colorSuffixAplhaMed = 'AA';
+const pinMap = [7, 8, 4, 5, 2, 1, 3, 6, 9, 10];
+const here = "HEREDOC";
+const pegtoppad = 75;
+const pegleftpad = 20;
+const pegwidth = 36;
+const pegheight = 36;
+const pegvspace = 20;
+const peghspace = 20;
+const bouncePath = getHereDocFromCodeBlock(function () {
+    /*HEREDOC
+    m212,70 
+    C222,60 230,90 228,116
+    C230,120 235,159 239,161
+    C249,179 280,120 307,150
+    S313,180 280,273
+    C283,273 283,263 247,298
+    C247,298 287,328 284,348
+    C284,348 322,380 318,410
+    C284,410 322,430 283,470
+    C304,440 323,550 323,556
+    C323,526 466,540 466,590
+    C466,590 426,590 429,630
+    C439,640 409,610 409,730
+    HEREDOC*/
+});
+const myBouncePath = getHereDocFromCodeBlock(function () {
+    /*HEREDOC
+    m212,70 
+    C222,60 230,90 228,116
+    C230,120 235,159 239,161
+    C249,179 280,120 307,150
+    C466,590 426,590 429,630
+    C439,640 409,610 409,730
+    HEREDOC*/
+});
+//utility functions
+function makeQuickNumberedArray(Count) {
+    return Array.apply(null, { length: Count }).map(Number.call, Number);
+}
+function getStringBetween(str, start, end) {
+    let startoutset = str.indexOf(start),
+        endoutset = str.indexOf(end, startoutset + start.length);
+    if (startoutset == 0 || startoutset > endoutset) return "";
+    return str.slice(startoutset + start.length, endoutset);
+}
+function shuffleArray(array) {
+    return array.map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+}
+function getHereDocFromCodeBlock(func) {
+    return getStringBetween(func.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
+}
+//end utility functions
+
+function getNextPegDestination(currentColumn, currentRow, priorColumn, PriorRow) {
+    //if we're at 0 then just drop down to one
+    if (currentRow == 0) { return [[currentColumn, 1], [{ Column: currentColumn, Row: 1, Preferenceindex: 999999 }], [currentColumn, 1]] }
+    //halt moving at row 11
+    if (currentRow == 10) { return [[currentColumn, 10], [{ Column: currentColumn, Row: 10, Preferenceindex: 999999 }], [currentColumn, 10]] }
+    //loop from two rows down until one row above and from middle column outward to find a viable destination
+    let lowestPotentialRow = Math.max(1, currentRow - 1);
+    let highestPotentialRow = Math.min(currentRow + 2, 11);
+    let lowestPotentialColumn = Math.max(0, currentColumn - 3);
+    let highestPotentialColumn = Math.min(currentColumn + 3, 10);
+    let viablePotentials = [];
+    let topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 0 };
+    makeQuickNumberedArray(highestPotentialRow).reverse().forEach(myRow => {
+        if (myRow > highestPotentialRow || myRow < lowestPotentialRow) return;
+        makeQuickNumberedArray(highestPotentialColumn).forEach(myColumn => {
+            if (myColumn < 1 || myColumn > 9) return;
+            if (myColumn > highestPotentialColumn || myColumn < lowestPotentialColumn) return;
+            //we cannot cross directly through a peg
+            if (priorColumn > currentColumn && myColumn < currentColumn && myRow != currentRow) return;
+            if (priorColumn > currentColumn && myColumn > currentColumn && myRow != currentRow) return;
+            let myPreferenceIndex = Math.abs(7 - myColumn) + myColumn + (myRow * 2) + Math.floor(Math.random() * 2 - (Math.abs(myColumn - currentColumn)));
+            if (PriorRow > 0 && PriorRow % 2 > 0 && myColumn == priorColumn && Math.random() > 0.25) myPreferenceIndex = myPreferenceIndex - 4;
+            //FIXME add preference for staying on left or right if prior is same combined with peg angle 
+            if (currentRow == 11) {
+                topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 999999 }
+            } else {
+                if (myPreferenceIndex > topPotential.PreferenceIndex) { topPotential = { Column: myColumn, Row: myRow, PreferenceIndex: myPreferenceIndex } };
+                viablePotentials.push({ Column: myColumn, Row: myRow, Preferenceindex: myPreferenceIndex });
+            }
+        });
+    });
+    return [topPotential, viablePotentials, [topPotential.Column, topPotential.Row]];
+}
+function getPegPathFromPegDestinations(pegList) {
+    const bouncepathPegVertical = 65;
+    const bouncepathPegHorizontal = 65;
+    let thisPath = makeQuickNumberedArray(pegList.length);
+    thisPath.forEach(destinationNumber => {
+        let thispeglocation = [pegList[destinationNumber][0] * bouncepathPegHorizontal + pegleftpad, pegList[destinationNumber][1] * bouncepathPegVertical + pegtoppad];
+        if (destinationNumber == 0) { thisPath[destinationNumber] = 'm' + thispeglocation[0] + ',' + pegtoppad };
+        if (destinationNumber > 0) {
+            let priorpeglocation = [pegList[destinationNumber - 1][0] * bouncepathPegHorizontal, pegList[destinationNumber - 1][1] * bouncepathPegVertical + pegtoppad];
+            thisPath[destinationNumber] = ('C' + priorpeglocation.join(',') + ' ' + priorpeglocation.join(',') + ' ' + thispeglocation.join(',') + ' ');
+        }
+    });
+    return thisPath.join(' '); //FIXME
+}
+function makeMovementSequence(startingColumn) {
+    let myMovementSequence = [];
+    makeQuickNumberedArray(30).forEach(myItem => {
+        if (myMovementSequence.length == 0) {
+            myMovementSequence.push([startingColumn, 0]);//initial prior
+            myMovementSequence.push([startingColumn, 0]);//initial current
+        }
+        myMovementSequence.push(
+            getNextPegDestination(
+                myMovementSequence[myMovementSequence.length - 1][0],
+                myMovementSequence[myMovementSequence.length - 1][1],
+                myMovementSequence[myMovementSequence.length - 2][0],
+                myMovementSequence[myMovementSequence.length - 2][1]
+            )[2]
+        );
+    });
+    return myMovementSequence;
+}
 function runPachinko() {
     window.snappachinko = {};
     window.snappachinko.s = Snap('#pachinkosvg');
     let myPaper = window.snappachinko.s;
-    let pinMap = [7, 8, 4, 5, 2, 1, 3, 6, 9, 10];
-    const bucketPath = "M4424.5,5004.6c-1455-78.5-2647.8-363.8-3407.8-813.7C444.3,3852.1,138,3438.5,103.5,2958c-28.7-388.6,118.7-729.4,455.7-1056.8l151.2-147.4V-501.5c0-1981.5,3.8-2272.5,30.6-2402.7c197.2-959.2,1468.4-1642.6,3434.6-1845.6c314-32.6,1332.5-32.6,1646.5,0c1139.1,118.7,2031.3,388.6,2651.6,804.1c325.5,218.3,559.1,472.9,687.3,750.5c130.2,285.3,126.4,189.6,126.4,2693.7v2255.3l151.3,147.4c384.8,373.3,528.4,781.1,432.7,1231C9656.9,4145,8071.7,4853.4,5688.1,4998.9C5402.9,5016.1,4692.6,5019.9,4424.5,5004.6z M6051.9,3744.9c970.7-95.7,1834.1-323.5,2345.3-620.3c124.4-72.8,277.6-204.9,277.6-239.3c0-70.8-271.8-269.9-530.3-386.7c-1435.9-654.8-4164-727.5-5892.8-158.9c-321.6,107.2-706.5,298.7-834.7,415.4c-99.5,91.9-101.5,95.7-74.7,145.5c40.2,78.5,233.6,214.4,449.9,317.8c593.5,287.2,1485.7,484.4,2488.9,555.2C4635.1,3796.6,5697.7,3781.2,6051.9,3744.9z";
-    const raphaelBucketPath = "M21.589,6.787c-0.25-0.152-0.504-0.301-0.76-0.445c-3.832-2.154-8.234-3.309-9.469-1.319c-1.225,2.103,2.314,5.798,6.293,8.222c0.082,0.051,0.167,0.098,0.25,0.146c5.463-0.402,9.887,0.204,9.989,1.402c0.009,0.105-0.026,0.211-0.083,0.318c0.018-0.025,0.041-0.045,0.057-0.07C29.146,12.943,25.585,9.222,21.589,6.787zM10.337,7.166l-0.722,1.52c-4.339,2.747-6.542,6.193-5.484,8.625c0.19,0.438,0.482,0.812,0.846,1.137l0.456-0.959c-0.156-0.178-0.292-0.365-0.384-0.577c-0.732-1.682,0.766-4.188,3.707-6.417l-3.323,6.994c1.492,1.689,5.748,1.748,10.276,0.154c-0.037-0.354,0.032-0.722,0.232-1.049c0.485-0.796,1.523-1.048,2.319-0.563c0.795,0.486,1.048,1.522,0.562,2.319c-0.484,0.795-1.523,1.047-2.319,0.562c-0.154-0.094-0.281-0.213-0.394-0.344c-4.354,1.559-8.372,1.643-10.553,0.314c-0.214-0.131-0.403-0.279-0.58-0.436l-0.124,0.26c-1.088,1.785,1.883,4.916,5.23,6.957c3.347,2.039,7.493,3.246,8.552,1.502l7.77-10.204c-2.48,0.384-6.154-0.963-9.272-2.864C14.014,12.197,11.131,9.546,10.337,7.166z";
-    const raphaelFlagPath = "M9.5,3v10c8,0,8,4,16,4V7C17.5,7,17.5,3,9.5,3z M6.5,29h2V3h-2V29z";
-    const bowlingPinPath = "M 12.78 121.69 c -21.75 -33.15 -10.9 -55.3 -2.77 -71.89 c 0.69 -1.4 1.35 -2.76 2.22 -4.62 c 0.13 -0.29 0.28 -2.11 0.38 -4.77 c 0.1 -2.65 0.13 -5.97 0.01 -9.35 c -0.07 -2.2 -0.56 -4.64 -1.05 -7.1 C 10.12 16.69 8.65 9.32 15.93 3 C 16.45 2.56 17 2.15 17.59 1.8 c 2.83 -1.72 6.14 -2.14 9.25 -1.53 c 3.07 0.6 5.98 2.23 8.05 4.62 c 0.47 0.54 0.9 1.13 1.29 1.77 c 0.79 1.3 1.37 2.77 1.68 4.39 c 0.29 1.5 0.35 3.13 0.14 4.87 c -0.18 1.52 -0.45 3.29 -0.75 5.24 c -1.23 8.11 -2.96 19.52 -0.44 24.82 c 0.65 1.36 1.25 2.55 1.88 3.8 c 7.33 14.54 18.63 36.97 -2.69 72.03 c -0.41 0.68 -1.14 1.05 -1.88 1.05 v 0.01 h -19.4 C 13.89 122.88 13.15 122.4 12.78 121.69 L 12.78 121.69 Z M 17 40.56 h 14.23 c -0.14 -2.19 -0.09 -4.54 0.07 -6.93 H 17.08 C 17.11 36.15 17.08 38.54 17 40.56 L 17 40.56 Z M 32.55 47.19 H 16.15 c -0.53 1.14 -1.35 2.81 -2.2 4.54 c -7.59 15.49 -17.69 36.12 1.98 66.74 H 32.9 c 19.18 -32.36 8.7 -53.17 1.88 -66.7 c -0.73 -1.45 -1.42 -2.82 -1.93 -3.89 C 32.74 47.66 32.64 47.43 32.55 47.19 L 32.55 47.19 Z M 16.84 28.62 h 14.94 c 0.34 -2.85 0.76 -5.62 1.13 -8.11 c 0.29 -1.94 0.56 -3.7 0.73 -5.11 c 0.15 -1.29 0.11 -2.47 -0.09 -3.53 c -0.21 -1.11 -0.6 -2.09 -1.12 -2.95 c -0.24 -0.4 -0.53 -0.8 -0.86 -1.17 C 30.15 6.12 28.14 5.01 26 4.59 c -2.1 -0.41 -4.3 -0.15 -6.13 0.96 c -0.36 0.22 -0.71 0.47 -1.06 0.78 c -5.34 4.63 -4.12 10.74 -2.91 16.78 C 16.26 24.95 16.62 26.77 16.84 28.62 L 16.84 28.62 Z";
-    const checkPath = "M5.48 10.089l1.583-1.464c1.854.896 3.028 1.578 5.11 3.063 3.916-4.442 6.503-6.696 11.312-9.688l.515 1.186c-3.965 3.46-6.87 7.314-11.051 14.814-2.579-3.038-4.301-4.974-7.469-7.911zm12.52 3.317v6.594h-16v-16h15.141c.846-.683 1.734-1.341 2.691-2h-19.832v20h20v-11.509c-.656.888-1.318 1.854-2 2.915z"
 
-    const colorMarioGreen = '#2CB01A';
-    const colorWhite = '#FFFFFF';
-    const colorOffWhite = '#DDDDDD';
-    const colorDimWhite = '#AAAAAA';
-    const colorBlack = '#000000';
-    const colorMint = '#BADA55';
-    const colorBrightRed = '#D10F18';
-    const colorLightRed = '#f9545b';
-    const colorSuffixAplhaMed = 'AA';
-
-    //utility functions
-    function makeQuickNumberedArray(Count) {
-        return Array.apply(null, { length: Count }).map(Number.call, Number);
-    }
-    function getStringBetween(str, start, end) {
-        let startoutset = str.indexOf(start),
-            endoutset = str.indexOf(end, startoutset + start.length);
-        if (startoutset == 0 || startoutset > endoutset) return "";
-        return str.slice(startoutset + start.length, endoutset);
-    }
-    function shuffleArray(array) {
-        return array.map(value => ({ value, sort: Math.random() }))
-            .sort((a, b) => a.sort - b.sort)
-            .map(({ value }) => value)
-    }
-    function getHereDocFromCodeBlock(func) {
-        let here = "HEREDOC";
-        return getStringBetween(func.toString().replace("/*" + here, "{{{start " + here + " }}}").replace(here + "*/", "{{{end " + here + " }}}"), "{{{start " + here + " }}}", "{{{end " + here + " }}}");
-    }
-    //end utility functions
 
     function displayPachinko() {
-        const toppad = 75;
-        const leftpad = 20;
-        const pegwidth = 36;
-        const pegheight = 36;
-        const vspace = 20;
-        const hspace = 20;
 
         let pinAnimations = [];
         let ballAnimations = [];
@@ -60,7 +153,7 @@ function runPachinko() {
             let angle = Math.floor(((bias * 0.5) + 0.25) * 90);
             const cornered = 5;
             const rounded = 50;
-            let myleftpad = leftpad + y % 2 * 20;
+            let myleftpad = pegleftpad + y % 2 * 20;
             myPaper[myDesignation] = myPaper.group();
             let myGroup = myPaper[myDesignation];
             let peg = myPaper.rect(0, 0, pegwidth, pegheight, rounded, rounded);
@@ -72,30 +165,13 @@ function runPachinko() {
             pegLabelAnimations.push([textLabel, { fill: colorBlack }]);
             textLabel.appendTo(myGroup);
             //fixme (y-x) ?huh?
-            myGroup.animate({ transform: 'translate(' + ((pegwidth + hspace) * x + myleftpad) + ',' + ((pegheight + vspace) * (y) + pegheight + toppad) + ')' }, 700, mina.bounce);
+            myGroup.animate({ transform: 'translate(' + ((pegwidth + peghspace) * x + myleftpad) + ',' + ((pegheight + pegvspace) * (y) + pegheight + pegtoppad) + ')' }, 700, mina.bounce);
             // peg.animate({ transform: 'r(' + (angle + '') + ')' }, 700, mina.bounce);
             pegAnimations.push([peg, { r: cornered }, { transform: 'r(' + (angle + '') + ')' }]);
             //peg.animate({ r: cornered }, 3000, mina.easein);
         }
         //init
         myPaper.clear();
-        let bouncePath = getHereDocFromCodeBlock(function () {
-            /*HEREDOC
-            m212,70 
-            C222,60 230,90 228,116
-            C230,120 235,159 239,161
-            C249,179 280,120 307,150
-            S313,180 280,273
-            C283,273 283,263 247,298
-            C247,298 287,328 284,348
-            C284,348 322,380 318,410
-            C284,410 322,430 283,470
-            C304,440 323,550 323,556
-            C323,526 466,540 466,590
-            C466,590 426,590 429,630
-            C439,640 409,610 409,730
-            HEREDOC*/
-        });
         let testbox = myPaper.circle(0, 0, 5).attr({ fill: colorWhite + "00", stroke: colorBlack + "00", strokeWidth: 3 });
         let testboxgroup = myPaper.group();
         testboxgroup.append(testbox);
@@ -124,7 +200,7 @@ function runPachinko() {
             buttonGroup.append(button);
             const labels = ['one', 'two', 'three', 'four', 'five', 'six'];
             let textLabel = myPaper.text(17, 16, labels[buttonNumber]);
-            textLabel.attr({ stroke: '#000000' });
+            textLabel.attr({ stroke: colorBlack });
             textLabel.transform('scale(' + 2.2 + ',' + 2.2 + ') translate(' + (40) + ',' + 24 + ')');
             textLabel.appendTo(buttonGroup);
 
@@ -134,7 +210,7 @@ function runPachinko() {
                     pinGroupTuple[0].animate({ transform: pinGroupTuple[1] }, 300, mina.easein);
                 });
             }
-            function bounceSingleExampleBall () {
+            function bounceSingleExampleBall() {
                 //demo single ball down round peg pachinko
                 let myPath = myPaper.path(bouncePath).attr({
                     fill: "none", stroke: colorWhite + "00", strokeWidth: 1
@@ -192,7 +268,6 @@ function runPachinko() {
         let myRedRadialGradient = myPaper.gradient("r(0.5, 0.5, 0.8)" + colorLightRed + "-" + colorBrightRed + "-" + colorDimWhite);
         makeQuickNumberedArray(360).forEach(ballNumber => {
             let ballGroup = myPaper.group();
-            // let ball = Snap.parse(BallFragmentString());
             let ball = myPaper.circle(250, 250, 250).attr({
                 fill: myRedRadialGradient, stroke: colorBlack, strokeWidth: 10
             });
@@ -200,7 +275,7 @@ function runPachinko() {
             ballGroup.appendTo(ballsGroup);
             ballAnimations.push([ballGroup,
                 'scale(' + 1 + ',' + 1 + ') translate(' + ((Math.sin(ballNumber * Math.PI / 180) * 1100)) + ',' + ((Math.cos(ballNumber * Math.PI / 180) * 900)) + ')',
-                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + ((Math.random() * 100 * 22) + (pinMap.indexOf(columnPinOfFirstPlay) * (pegwidth + hspace) / 0.025)) + ',' + ballNumber * 9 + ')',
+                'scale(' + 0.025 + ',' + 0.025 + ') translate(' + ((Math.random() * 100 * 22) + (pinMap.indexOf(columnPinOfFirstPlay) * (pegwidth + peghspace) / 0.025)) + ',' + ballNumber * 9 + ')',
                 'scale(' + 0.025 + ',' + 0.025 + ') translate(' + (Math.random() * 100 * 22) + ',' + 600 / 0.025 + ')'
             ]);
             // ballGroup.transform('scale(' + 1.025 + ',' + 1.025 + ') translate(' + (600) + ',' + (8) + ')');
@@ -217,67 +292,7 @@ function runPachinko() {
             });
         }
         function BounceBallToBuckets() {
-            let myBouncePath = getHereDocFromCodeBlock(function () {
-                /*HEREDOC
-                m212,70 
-                C222,60 230,90 228,116
-                C230,120 235,159 239,161
-                C249,179 280,120 307,150
-                C466,590 426,590 429,630
-                C439,640 409,610 409,730
-                HEREDOC*/
-            });
-            function getNextPegDestination(currentColumn, currentRow, priorColumn, PriorRow) {
-                //loop from two rows down until one row above and from middle column outward to find a viable destination
-                let lowestPotentialRow = Math.max(1, currentRow - 1);
-                let highestPotentialRow = Math.min(currentRow + 2, 10);
-                let lowestPotentialColumn = Math.max(0, currentColumn - 3);
-                let highestPotentialColumn = Math.min(currentColumn + 3, 10);
-                let viablePotentials = [];
-                let topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 0 };
-                makeQuickNumberedArray(highestPotentialRow).reverse().forEach(myRow => {
-                    if (myRow > highestPotentialRow || myRow < lowestPotentialRow) return;
-                    makeQuickNumberedArray(highestPotentialColumn).forEach(myColumn => {
-                        if (myColumn < 1 || myColumn > 9) return;
-                        if (myColumn > highestPotentialColumn || myColumn < lowestPotentialColumn) return;
-                        //we cannot cross directly through a peg
-                        if (priorColumn > currentColumn && myColumn < currentColumn && myRow != currentRow) return;
-                        if (priorColumn > currentColumn && myColumn > currentColumn && myRow != currentRow) return;
-                        let myPreferenceIndex = Math.abs(7 - myColumn) + myColumn + (myRow * 2) + Math.floor(Math.random() * 2 - (Math.abs(myColumn - currentColumn)))
-                        //FIXME add preference for staying on left or right if prior is same combined with peg angle 
-                        if (currentRow == 11) {
-                            topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 999999 }
-                        } else {
-                            if (myPreferenceIndex > topPotential.PreferenceIndex) { topPotential = { Column: myColumn, Row: myRow, PreferenceIndex: myPreferenceIndex } };
-                            viablePotentials.push({ Column: myColumn, Row: myRow, Preferenceindex: myPreferenceIndex });
-                        }
-                    });
-                });
-                return [topPotential, viablePotentials, [topPotential.Column, topPotential.Row]];
-            }
-            let myMovementSequence = [];
-            makeQuickNumberedArray(30).forEach(myItem => {
-                if (myMovementSequence.length == 0) {
-                    myMovementSequence.push([3, 0]);//initial prior
-                    myMovementSequence.push([3, 0]);//initial current
-                }
-                myMovementSequence.push(
-                    getNextPegDestination(
-                        myMovementSequence[myMovementSequence.length - 1][0], myMovementSequence[myMovementSequence.length - 1][1], myMovementSequence[myMovementSequence.length - 2][0], myMovementSequence[myMovementSequence.length - 2][1])[2]);
-            });
-            function getPegPathFromPegDestinations(pegList) {
-                let thisPath = makeQuickNumberedArray(pegList.length)
-                thisPath.forEach(destinationNumber => {
-                    let thispeglocation = [pegList[destinationNumber][0] * 80, pegList[destinationNumber][1] * 80];
-                    if (destinationNumber == 0) { thisPath[destinationNumber] = 'm' + thispeglocation[0] + ',80' };
-                    if (destinationNumber > 0) {
-                        let priorpeglocation = [pegList[destinationNumber - 1][0] * 80, pegList[destinationNumber - 1][1] * 70 + 80];
-                        thisPath[destinationNumber] = ('C' + priorpeglocation.join(',') + ' ' + priorpeglocation.join(',') + ' ' + thispeglocation.join(',') + ' ');
-                    }
-                });
-                return thisPath.join(' '); //FIXME
-            }
-            let bouncePath = getPegPathFromPegDestinations(myMovementSequence);
+            let bouncePath = getPegPathFromPegDestinations(makeMovementSequence(3));
             let medCopyBallAnimations = [];
             ballAnimations.forEach(function (ba) {
                 medCopyBallAnimations.push(ba[0]);
@@ -317,9 +332,6 @@ function runPachinko() {
             let subgroup = [];
             subgroup.push(medCopyBallAnimations.pop())
             launchSubgroup(subgroup);
-
-
-
             console.log(getNextPegDestination(3, 0, 3, 0));
             function getNextImpactPoint(currentX, currentY, priorX, priorY) {
                 let myangle = getImpactDepartureAngle(currentX, currentY, priorX, priorY);
@@ -381,7 +393,7 @@ function runPachinko() {
             let pin = myPaper.path(bowlingPinPath);
             pin.attr({ fill: colorOffWhite, stroke: colorDimWhite, strokeWidth: 1 });
 
-            if (isMovable) { pinAnimations.push([pinGroup, 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + leftpad + (bowlingPinNumber * (pegwidth + hspace) / pinScale)) + ',' + (pegwidth / 2) + ')']) };
+            if (isMovable) { pinAnimations.push([pinGroup, 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + pegleftpad + (bowlingPinNumber * (pegwidth + peghspace) / pinScale)) + ',' + (pegwidth / 2) + ')']) };
             function moveBowlingPinsToFormation() {
                 const leftmargin = 870;
                 const topmargin = 430;
@@ -414,27 +426,8 @@ function runPachinko() {
             textLabel.attr({ stroke: colorWhite });
             textLabel.transform('scale(' + bucketScaleHorizontal + ',-' + bucketScaleVertical + ') translate(' + (labelText - 10 ? 16 : 12) + ',-' + (bucketScaleVertical / 10) + ')');
             textLabel.appendTo(bucketGroup);
-            bucketGroup.transform('scale(' + (1 / bucketScaleHorizontal) + ',-' + (1 / bucketScaleVertical) + ') translate(' + (900 + (bucketNumber * 10000)) + ',-' + ((120 * toppad) + ((70) * 1000)) + ')');
+            bucketGroup.transform('scale(' + (1 / bucketScaleHorizontal) + ',-' + (1 / bucketScaleVertical) + ') translate(' + (900 + (bucketNumber * 10000)) + ',-' + ((120 * pegtoppad) + ((70) * 1000)) + ')');
         });
-
-        //Balls
-        function BallFragmentString() {
-            return getHereDocFromCodeBlock(function () {
-                /*HEREDOC
-                <linearGradient id="linearGradientRedBall" y2="535.22" gradientUnits="userSpaceOnUse" x2="605.71" y1="535.22"
-                    x1="154.29">
-                    <stop id="stop15842" style="stop-color:#770900" offset="0" />
-                    <stop id="stop15848" style="stop-color:#da101b" offset=".5" />
-                    <stop id="stop15850" style="stop-color:#d2400f" offset=".75" />
-                    <stop id="stop15852" style="stop-color:#d44316;stop-opacity:.61458" offset=".9375" />
-                    <stop id="stop15838" style="stop-color:#c30000;stop-opacity:.21875" offset="1" />
-                </linearGradient>
-                <path xmlns="http://www.w3.org/2000/svg" id="path14863" style="fill:url(#linearGradientRedBall)"
-                    d="m605.71 535.22a225.71 225.71 0 1 1 -451.42 0 225.71 225.71 0 1 1 451.42 0z"
-                    transform="matrix(-.67295 -.73969 .73969 -.67295 239.83 1176.5)" />
-                HEREDOC*/
-            });
-        }
         //buttons
         function ButtonFragmentString() {
             return getHereDocFromCodeBlock(function () {
@@ -446,7 +439,7 @@ function runPachinko() {
                 HEREDOC*/
             });
         }
-    } // displayGraph
+    }
     displayPachinko();
 }
 
