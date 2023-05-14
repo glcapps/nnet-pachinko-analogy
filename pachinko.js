@@ -75,12 +75,12 @@ function getNextPegDestination(currentColumn, currentRow, priorColumn, PriorRow)
     makeQuickNumberedArray(highestPotentialRow).reverse().forEach(myRow => {
         if (myRow > highestPotentialRow || myRow < lowestPotentialRow) return;
         makeQuickNumberedArray(highestPotentialColumn).forEach(myColumn => {
-            if (myColumn < 1 || myColumn > 9) return;
+            if (myColumn < 0 || myColumn > 9) return;
             if (myColumn > highestPotentialColumn || myColumn < lowestPotentialColumn) return;
             //we cannot cross directly through a peg
             if (priorColumn > currentColumn && myColumn < currentColumn && myRow != currentRow) return;
             if (priorColumn > currentColumn && myColumn > currentColumn && myRow != currentRow) return;
-            let myPreferenceIndex = Math.abs(7 - myColumn) + myColumn + (myRow * 2) + Math.floor(Math.random() * 2 - (Math.abs(myColumn - currentColumn)));
+            let myPreferenceIndex = Math.abs(8 - myColumn) + myColumn + (myRow * 2) + Math.floor(Math.random() * 10 - (Math.abs(myColumn - currentColumn)));
             if (PriorRow > 0 && PriorRow % 2 > 0 && myColumn == priorColumn && Math.random() > 0.25) myPreferenceIndex = myPreferenceIndex - 4;
             //FIXME add preference for staying on left or right if prior is same combined with peg angle 
             if (currentRow == 11) {
