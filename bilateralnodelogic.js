@@ -13,3 +13,6 @@ function getIdealBucketResult(myBucket, scenarioInputList, myscenarioPin) { }
 function getIterationHappiness(myPegWeights, scenarioInputList, scenarioNeededOutput) { }
 function getScenarioNeededOutput(scenarioInputList){}
 function getWorstPerformingScenario(myPegWeights, scenarioInputList){}
+window.logictest = function(){
+    
+}
