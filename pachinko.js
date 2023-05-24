@@ -57,7 +57,7 @@ function getNextPegDestination(currentColumn, currentRow, priorColumn, PriorRow)
     let highestPotentialRow = Math.min(currentRow + 2, 11);
     let lowestPotentialColumn = Math.max(0, currentColumn - 3);
     let highestPotentialColumn = Math.min(currentColumn + 3, 10);
-    let viablePotentials = [];
+    let viablePotentials = [];5.
     let topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 0 };
     makeQuickNumberedArray(highestPotentialRow).reverse().forEach(myRow => {
         if (myRow > highestPotentialRow || myRow < lowestPotentialRow) return;
