@@ -17,7 +17,7 @@ const colorMint = '#BADA55';
 const colorBrightRed = '#D10F18';
 const colorLightRed = '#f9545b';
 const colorSuffixAplhaMed = 'AA';
-const buttonlabels = ['one', 'two', 'three', 'four', 'five', 'six','seven'];
+const buttonlabels = ['one', 'two', 'three', 'four', 'five', 'six', 'seven'];
 const pinMap = [7, 8, 4, 5, 2, 1, 3, 6, 9, 10];
 const here = "HEREDOC";
 const pegtoppad = 75;
@@ -27,6 +27,10 @@ const pegheight = 36;
 const pegvspace = 20;
 const peghspace = 20;
 const columnPinOfFirstPlay = Math.floor(Math.random() * 9) + 1;
+const pinformationleftmargin = 870;
+const pinformationtopmargin = 530;
+const pinformationrowWidth = 40;
+const pinformationrowHeight = 65;
 const bouncePath = getHereDocFromCodeBlock(function () {
     /*HEREDOC
     m212,70 
@@ -57,7 +61,7 @@ function getNextPegDestination(currentColumn, currentRow, priorColumn, PriorRow)
     let highestPotentialRow = Math.min(currentRow + 2, 11);
     let lowestPotentialColumn = Math.max(0, currentColumn - 3);
     let highestPotentialColumn = Math.min(currentColumn + 3, 10);
-    let viablePotentials = [];5.
+    let viablePotentials = [];
     let topPotential = { Column: currentColumn, Row: currentRow, PreferenceIndex: 0 };
     makeQuickNumberedArray(highestPotentialRow).reverse().forEach(myRow => {
         if (myRow > highestPotentialRow || myRow < lowestPotentialRow) return;
@@ -230,6 +234,11 @@ function runPachinko() {
                     pegTuple[0].animate(pegTuple[2], 2000, mina.bounce);
                 });
             }
+            function showTestImpact(){
+                let teststuff = {};
+                teststuff.ball = testball;
+                window.logictest(teststuff);
+            }
             buttonGroup.transform('scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 730) + ',' + (buttonNumber * 71 + 100) + ')')
                 .data("buttonNumber", buttonNumber)
                 .click(function () {
@@ -242,7 +251,7 @@ function runPachinko() {
                         makePegsToSquares,
                         makePegsAngledRandomly,
                         BounceBallToBuckets,
-                        window.logictest][buttonNumber]();
+                        showTestImpact][buttonNumber]();
                 });
             buttonGroup.appendTo(buttonsGroup);
         });
@@ -350,11 +359,27 @@ function runPachinko() {
 
             if (isMovable) { pinAnimations.push([pinGroup, 'scale(' + pinScale + ',' + pinScale + ') translate(' + (15 + pegleftpad + (bowlingPinNumber * (pegwidth + peghspace) / pinScale)) + ',' + (pegwidth / 2) + ')']) };
             function moveBowlingPinsToFormation() {
-                const leftmargin = 870;
-                const topmargin = 430;
-                const rowWidth = 40;
-                const rowHeight = 65;
-                let pinPositions = [[], [leftmargin + rowWidth * 3, topmargin + rowHeight * 3], [leftmargin + rowWidth * 2, topmargin + rowHeight * 2], [leftmargin + rowWidth * 4, topmargin + rowHeight * 2], [leftmargin + rowWidth, topmargin + rowHeight], [leftmargin + rowWidth * 3, topmargin + rowHeight], [leftmargin + rowWidth * 5, topmargin + rowHeight], [leftmargin, topmargin], [leftmargin + rowWidth * 2, topmargin], [leftmargin + rowWidth * 4, topmargin], [leftmargin + rowWidth * 6, topmargin]];
+                let pinPositions =
+                    [[],
+                    [pinformationleftmargin + pinformationrowWidth * 3,
+                    pinformationtopmargin + pinformationrowHeight * 3],
+                    [pinformationleftmargin + pinformationrowWidth * 2,
+                    pinformationtopmargin + pinformationrowHeight * 2],
+                    [pinformationleftmargin + pinformationrowWidth * 4,
+                    pinformationtopmargin + pinformationrowHeight * 2],
+                    [pinformationleftmargin + pinformationrowWidth,
+                    pinformationtopmargin + pinformationrowHeight],
+                    [pinformationleftmargin + pinformationrowWidth * 3,
+                    pinformationtopmargin + pinformationrowHeight],
+                    [pinformationleftmargin + pinformationrowWidth * 5,
+                    pinformationtopmargin + pinformationrowHeight],
+                    [pinformationleftmargin, pinformationtopmargin],
+                    [pinformationleftmargin + pinformationrowWidth * 2,
+                        pinformationtopmargin],
+                    [pinformationleftmargin + pinformationrowWidth * 4,
+                        pinformationtopmargin],
+                    [pinformationleftmargin + pinformationrowWidth * 6,
+                        pinformationtopmargin]];
                 pinGroup.transform('scale(' + pinScale + ',' + pinScale + ') translate(' + pinPositions[pinMap[bowlingPinNumber]][0] + ',' + pinPositions[pinMap[bowlingPinNumber]][1] + ')');
             }
             moveBowlingPinsToFormation();
