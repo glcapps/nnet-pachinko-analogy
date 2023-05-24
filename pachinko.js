@@ -241,7 +241,8 @@ function runPachinko() {
                         collectBallsToColumn,
                         makePegsToSquares,
                         makePegsAngledRandomly,
-                        BounceBallToBuckets][buttonNumber]();
+                        BounceBallToBuckets,
+                        window.logictest][buttonNumber]();
                 });
             buttonGroup.appendTo(buttonsGroup);
         });
