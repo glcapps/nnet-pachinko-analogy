@@ -236,7 +236,8 @@ function runPachinko() {
             }
             function showTestImpact(){
                 let teststuff = {};
-                teststuff.ball = testball;
+                teststuff.ball = testballgroup;
+                teststuff.myPaper = myPaper;
                 window.logictest(teststuff);
             }
             buttonGroup.transform('scale(' + 0.8 + ',' + 0.5 + ') translate(' + (Math.random() * 10 + 730) + ',' + (buttonNumber * 71 + 100) + ')')
